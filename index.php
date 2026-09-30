@@ -303,7 +303,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <button
                         type="button"
                         class="ver-password"
-                        onclick="mostrarPassword()"
+                        aria-label="Mostrar contraseña"
                         id="botonPassword"
                     >
                         👁
@@ -375,34 +375,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 
-<script>
-
-function mostrarPassword() {
-
-    const password =
-        document.getElementById("password");
-
-    const boton =
-        document.getElementById("botonPassword");
-
-
-    if (password.type === "password") {
-
-        password.type = "text";
-
-        boton.textContent = "🙈";
-
-    } else {
-
-        password.type = "password";
-
-        boton.textContent = "👁";
-
-    }
-
-}
-
-</script>
+<script src="js/javascript.js" defer></script>
 
 
 </body>

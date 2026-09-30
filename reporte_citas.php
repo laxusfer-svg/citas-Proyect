@@ -431,100 +431,14 @@ $resultDetalle = $stmt->get_result();
 <!-- =====================================
      INICIALIZACIÓN DE CHART.JS
 ===================================== -->
-<script>
-    // Inyección de variables PHP a JavaScript
-    const datosEstados = <?php echo json_encode($estados); ?>;
-    const datosEspecialidades = <?php echo json_encode($datosEspecialidades); ?>;
-    const datosMes = <?php echo json_encode(array_reverse($datosMes)); ?>; // Orden cronológico ascendente para el gráfico
-
-    // 1. Gráfico Circular (Dona) - Estados de Citas
-    new Chart(document.getElementById('chartEstados'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Atendidas', 'Pendientes', 'Confirmadas', 'Canceladas'],
-            datasets: [{
-                data: [
-                    datosEstados.atendida || 0,
-                    datosEstados.pendiente || 0,
-                    datosEstados.confirmada || 0,
-                    datosEstados.cancelada || 0
-                ],
-                backgroundColor: ['#28a745', '#d68910', '#1976d2', '#dc3545']
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
-            }
-        }
-    });
-
-    // 2. Gráfico de Barras - Citas por Especialidad
-    new Chart(document.getElementById('chartEspecialidades'), {
-        type: 'bar',
-        data: {
-            labels: datosEspecialidades.map(item => item.especialidad),
-            datasets: [{
-                label: 'Total Citas',
-                data: datosEspecialidades.map(item => item.total),
-                backgroundColor: '#1976d2',
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, ticks: { precision: 0 } }
-            },
-            plugins: {
-                legend: { display: false }
-            }
-        }
-    });
-
-    // 3. Gráfico de Barras Apiladas / Agrupadas - Citas por Mes
-    new Chart(document.getElementById('chartMes'), {
-        type: 'bar',
-        data: {
-            labels: datosMes.map(item => item.mes),
-            datasets: [
-                {
-                    label: 'Atendidas',
-                    data: datosMes.map(item => item.atendidas),
-                    backgroundColor: '#28a745'
-                },
-                {
-                    label: 'Pendientes',
-                    data: datosMes.map(item => item.pendientes),
-                    backgroundColor: '#d68910'
-                },
-                {
-                    label: 'Confirmadas',
-                    data: datosMes.map(item => item.confirmadas),
-                    backgroundColor: '#1976d2'
-                },
-                {
-                    label: 'Canceladas',
-                    data: datosMes.map(item => item.canceladas),
-                    backgroundColor: '#dc3545'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, ticks: { precision: 0 } }
-            },
-            plugins: {
-                legend: { position: 'bottom' }
-            }
-        }
-    });
-</script>
+<script type="application/json" id="report-chart-data"><?php
+echo json_encode([
+    "estados" => $estados,
+    "especialidades" => $datosEspecialidades,
+    "meses" => array_reverse($datosMes)
+], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+?></script>
+<script src="js/javascript.js" defer></script>
 
 </body>
 
