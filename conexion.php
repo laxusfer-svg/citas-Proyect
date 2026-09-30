@@ -2,7 +2,7 @@
 
 $host = getenv("DB_HOST") ?: "localhost";
 $usuario = getenv("DB_USER") ?: "root";
-$password = getenv("DB_PASSWORD");
+$password = getenv("DB_PASSWORD")?: "Prueba123$";
 $baseDatos = getenv("DB_NAME") ?: "sistema";
 
 if ($password === false) {
