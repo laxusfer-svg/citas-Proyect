@@ -456,7 +456,7 @@ if ($rol == 0) {
 
         <?php if ($rol == 2): ?>
 
-            <a href="#">
+            <a href="pacientes">
                 <div class="menu-icon">👥</div>
                 <span>Pacientes</span>
             </a>
