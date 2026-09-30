@@ -2557,3 +2557,275 @@ a:focus-visible {
     font-size: 12px;
 }
 }
+
+/* Directorio administrativo de doctores */
+@scope (body.page-doctores) {
+    :scope {
+        min-height: 100vh;
+        margin: 0;
+        color: #17345c;
+        background: #f2f6fa;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .doctores-page {
+        width: min(100% - 48px, 1380px);
+        margin: 0 auto;
+        padding: 34px 0 48px;
+    }
+
+    .doctores-header,
+    .doctores-section-heading,
+    .doctor-form-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+    }
+
+    .doctores-header {
+        margin-bottom: 24px;
+    }
+
+    .doctores-header h1 {
+        margin: 0;
+        color: #173b68;
+        font-size: 28px;
+    }
+
+    .doctores-header > div > p:last-child {
+        margin: 8px 0 0;
+        color: #68809d;
+        font-size: 14px;
+    }
+
+    .doctores-eyebrow {
+        margin: 0 0 7px;
+        color: #1976e8;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .8px;
+    }
+
+    .doctores-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 16px;
+        border: 1px solid #d6e1ec;
+        border-radius: 8px;
+        color: #31577c;
+        background: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .doctores-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(360px, .85fr);
+        align-items: start;
+        gap: 20px;
+    }
+
+    .doctores-form-section,
+    .doctores-list-section {
+        min-width: 0;
+        padding: 24px;
+        border: 1px solid #e3ebf2;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 5px 18px rgba(20, 60, 100, .06);
+    }
+
+    .doctores-section-heading {
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+
+    .doctores-section-heading h2 {
+        margin: 0;
+        color: #173b68;
+        font-size: 19px;
+    }
+
+    .doctores-count {
+        padding: 6px 9px;
+        border-radius: 20px;
+        color: #42647f;
+        background: #edf5fb;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .doctor-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 15px;
+    }
+
+    .doctor-form-grid label {
+        display: grid;
+        gap: 7px;
+        min-width: 0;
+        color: #31516f;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .doctor-form-grid label span {
+        display: inline;
+        color: #8496a8;
+        font-size: 11px;
+        font-weight: 400;
+    }
+
+    .doctor-form-grid input {
+        width: 100%;
+        min-width: 0;
+        min-height: 42px;
+        padding: 9px 11px;
+        border: 1px solid #d5e0e9;
+        border-radius: 7px;
+        color: #17345c;
+        background: #fff;
+        font: inherit;
+        font-weight: 400;
+    }
+
+    .doctor-form-grid input:focus {
+        border-color: #1976e8;
+        outline: 0;
+        box-shadow: 0 0 0 3px rgba(25, 118, 232, .12);
+    }
+
+    .doctor-form-footer {
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #e8eef4;
+    }
+
+    .doctor-form-footer p {
+        margin: 0;
+        color: #71869a;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .doctor-form-footer button {
+        min-height: 44px;
+        padding: 0 17px;
+        border: 0;
+        border-radius: 8px;
+        color: #fff;
+        background: #1976e8;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .doctor-form-footer button:hover {
+        background: #0d64ce;
+    }
+
+    .doctores-alerta {
+        margin-bottom: 18px;
+        padding: 13px 16px;
+        border: 1px solid #f0d597;
+        border-radius: 8px;
+        color: #76591c;
+        background: #fff7e3;
+        font-size: 14px;
+    }
+
+    .doctores-alerta.success {
+        border-color: #b8e2cb;
+        color: #176b43;
+        background: #eaf8ef;
+    }
+
+    .doctores-table-wrap {
+        overflow-x: auto;
+    }
+
+    .doctores-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    .doctores-table th {
+        padding: 11px 10px;
+        color: #345979;
+        background: #eff6fb;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .doctores-table td {
+        padding: 12px 10px;
+        border-bottom: 1px solid #edf1f5;
+        color: #49647f;
+        vertical-align: top;
+    }
+
+    .doctores-table td strong,
+    .doctores-table td small {
+        display: block;
+    }
+
+    .doctores-table td strong {
+        color: #234767;
+        font-weight: 600;
+    }
+
+    .doctores-table td small {
+        margin-top: 4px;
+        color: #8092a4;
+        font-size: 11px;
+    }
+
+    .doctores-empty {
+        padding: 24px !important;
+        color: #71869a !important;
+        text-align: center;
+    }
+
+    @media (max-width: 980px) {
+        .doctores-layout {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    @media (max-width: 560px) {
+        .doctores-page {
+            width: calc(100% - 28px);
+            padding: 22px 0 32px;
+        }
+
+        .doctores-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .doctores-header h1 {
+            font-size: 24px;
+        }
+
+        .doctores-form-section,
+        .doctores-list-section {
+            padding: 18px 14px;
+        }
+
+        .doctor-form-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .doctor-form-footer {
+            align-items: stretch;
+            flex-direction: column;
+        }
+    }
+}

@@ -461,7 +461,7 @@ if ($rol == 0) {
                 <span>Pacientes</span>
             </a>
 
-            <a href="#">
+            <a href="doctores">
                 <div class="menu-icon">👨‍⚕️</div>
                 <span>Doctores</span>
             </a>
