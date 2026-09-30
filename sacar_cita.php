@@ -40,6 +40,8 @@ if ($resultPaciente->num_rows == 0) {
 }
 
 $paciente = $resultPaciente->fetch_assoc();
+$resultPaciente->free();
+$stmtPaciente->close();
 $paciente_id = $paciente["id"];
 
 /* =====================================================
@@ -103,6 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($resultDoctor->num_rows == 0) {
 
+            $resultDoctor->free();
+            $stmtDoctor->close();
             $conexion->rollback();
 
             $mensaje = "El doctor seleccionado no existe.";
@@ -111,11 +115,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
 
             $doctor = $resultDoctor->fetch_assoc();
+            $resultDoctor->free();
+            $stmtDoctor->close();
 
             $sqlBloqueoPaciente = "SELECT id FROM pacientes WHERE id = ? FOR UPDATE";
             $stmtBloqueoPaciente = $conexion->prepare($sqlBloqueoPaciente);
             $stmtBloqueoPaciente->bind_param("i", $paciente_id);
             $stmtBloqueoPaciente->execute();
+            $resultBloqueoPaciente = $stmtBloqueoPaciente->get_result();
+            $pacienteBloqueado = $resultBloqueoPaciente->fetch_assoc();
+            $resultBloqueoPaciente->free();
+            $stmtBloqueoPaciente->close();
+
+            if (!$pacienteBloqueado) {
+                $conexion->rollback();
+                die("No se encontró el perfil del paciente.");
+            }
 
             /* =========================================
                VALIDAR FECHA
@@ -230,8 +245,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                     $stmtExiste->execute();
                     $resultExiste = $stmtExiste->get_result();
+                    $citaExistente = $resultExiste->num_rows > 0;
+                    $resultExiste->free();
+                    $stmtExiste->close();
 
-                    if ($resultExiste->num_rows > 0) {
+                    if ($citaExistente) {
 
                         $conexion->rollback();
 
