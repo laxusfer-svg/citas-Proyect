@@ -7,13 +7,25 @@ if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"])) {
     exit;
 }
 
-if ((int)$_SESSION["rol"] === 1 && empty($_SESSION["csrf_token"])) {
+if (in_array((int)$_SESSION["rol"], [1, 2], true) && empty($_SESSION["csrf_token"])) {
     $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
 $usuario_id = (int)$_SESSION["id"];
 $rol = (int)$_SESSION["rol"];
 $usuario = $_SESSION["usuario"];
+$transicionesEstadoCita = [
+    "pendiente" => ["confirmada", "cancelada"],
+    "confirmada" => ["atendida", "cancelada"],
+    "atendida" => [],
+    "cancelada" => []
+];
+$etiquetasEstadoCita = [
+    "pendiente" => "Pendiente",
+    "confirmada" => "Confirmada",
+    "atendida" => "Atendida",
+    "cancelada" => "Cancelada"
+];
 
 /* =====================================================
    VARIABLES GENERALES
@@ -795,6 +807,7 @@ if ($rol == 0) {
                         <th>Doctor</th>
                         <th>Especialidad</th>
                         <th>Estado</th>
+                        <th>Acción</th>
 
                     </tr>
 
@@ -906,12 +919,32 @@ if ($rol == 0) {
 
                         </td>
 
+                        <td>
+                            <?php $opcionesEstado = $transicionesEstadoCita[$fila["estado"]] ?? []; ?>
+                            <?php if ($opcionesEstado): ?>
+                                <form method="POST" action="actualizar_cita" class="form-estado-cita">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, "UTF-8"); ?>">
+                                    <input type="hidden" name="cita_id" value="<?php echo (int)$fila["id"]; ?>">
+                                    <label class="sr-only" for="estado-cita-<?php echo (int)$fila["id"]; ?>">Nuevo estado de cita</label>
+                                    <select id="estado-cita-<?php echo (int)$fila["id"]; ?>" name="estado" required>
+                                        <option value="" selected disabled>Cambiar estado</option>
+                                        <?php foreach ($opcionesEstado as $opcionEstado): ?>
+                                            <option value="<?php echo htmlspecialchars($opcionEstado); ?>"><?php echo htmlspecialchars($etiquetasEstadoCita[$opcionEstado]); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <button type="submit">Guardar</button>
+                                </form>
+                            <?php else: ?>
+                                <span class="accion-finalizada">Sin cambios</span>
+                            <?php endif; ?>
+                        </td>
+
                     </tr>
 
                 <?php endforeach; ?>
 
                 <tr class="fila-sin-resultados">
-                    <td colspan="7" class="mensaje-tabla-vacio">
+                    <td colspan="8" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -920,7 +953,7 @@ if ($rol == 0) {
 
                     <tr>
 
-                        <td colspan="7" class="mensaje-tabla-vacio">
+                        <td colspan="8" class="mensaje-tabla-vacio">
 
                             No hay citas registradas.
 
@@ -1090,6 +1123,7 @@ if ($rol == 0) {
                         <th>DNI</th>
                         <th>Motivo</th>
                         <th>Estado</th>
+                        <th>Acción</th>
 
                     </tr>
 
@@ -1179,12 +1213,32 @@ if ($rol == 0) {
 
                         </td>
 
+                        <td>
+                            <?php $opcionesEstado = $transicionesEstadoCita[$fila["estado"]] ?? []; ?>
+                            <?php if ($opcionesEstado): ?>
+                                <form method="POST" action="actualizar_cita" class="form-estado-cita">
+                                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, "UTF-8"); ?>">
+                                    <input type="hidden" name="cita_id" value="<?php echo (int)$fila["id"]; ?>">
+                                    <label class="sr-only" for="estado-cita-<?php echo (int)$fila["id"]; ?>">Nuevo estado de cita</label>
+                                    <select id="estado-cita-<?php echo (int)$fila["id"]; ?>" name="estado" required>
+                                        <option value="" selected disabled>Cambiar estado</option>
+                                        <?php foreach ($opcionesEstado as $opcionEstado): ?>
+                                            <option value="<?php echo htmlspecialchars($opcionEstado); ?>"><?php echo htmlspecialchars($etiquetasEstadoCita[$opcionEstado]); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <button type="submit">Guardar</button>
+                                </form>
+                            <?php else: ?>
+                                <span class="accion-finalizada">Sin cambios</span>
+                            <?php endif; ?>
+                        </td>
+
                     </tr>
 
                 <?php endforeach; ?>
 
                 <tr class="fila-sin-resultados">
-                    <td colspan="6" class="mensaje-tabla-vacio">
+                    <td colspan="7" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -1193,7 +1247,7 @@ if ($rol == 0) {
 
                     <tr>
 
-                        <td colspan="6" class="mensaje-tabla-vacio">
+                        <td colspan="7" class="mensaje-tabla-vacio">
 
                             No tienes citas registradas.
 

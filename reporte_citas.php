@@ -7,6 +7,23 @@ if (!isset($_SESSION["id"]) || $_SESSION["rol"] != 2) {
     exit;
 }
 
+if (empty($_SESSION["csrf_token"])) {
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
+}
+
+$transicionesEstadoCita = [
+    "pendiente" => ["confirmada", "cancelada"],
+    "confirmada" => ["atendida", "cancelada"],
+    "atendida" => [],
+    "cancelada" => []
+];
+$etiquetasEstadoCita = [
+    "pendiente" => "Pendiente",
+    "confirmada" => "Confirmada",
+    "atendida" => "Atendida",
+    "cancelada" => "Cancelada"
+];
+
 $fecha_inicio = $_GET["fecha_inicio"] ?? "";
 $fecha_fin = $_GET["fecha_fin"] ?? "";
 $dni = trim($_GET["dni"] ?? "");
@@ -395,6 +412,7 @@ $resultDetalle = $stmt->get_result();
                     <th>Especialidad</th>
                     <th>Motivo</th>
                     <th>Estado</th>
+                    <th>Acción</th>
                 </tr>
             </thead>
             <tbody>
@@ -417,6 +435,26 @@ $resultDetalle = $stmt->get_result();
                         ];
                         echo $estadosTexto[$fila["estado"]] ?? $fila["estado"];
                         ?>
+                    </td>
+                    <td>
+                        <?php $opcionesEstado = $transicionesEstadoCita[$fila["estado"]] ?? []; ?>
+                        <?php if ($opcionesEstado): ?>
+                            <form method="POST" action="actualizar_cita" class="form-estado-cita">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, "UTF-8"); ?>">
+                                <input type="hidden" name="cita_id" value="<?php echo (int)$fila["id"]; ?>">
+                                <input type="hidden" name="origen" value="reporte">
+                                <label class="sr-only" for="estado-reporte-<?php echo (int)$fila["id"]; ?>">Nuevo estado de cita</label>
+                                <select id="estado-reporte-<?php echo (int)$fila["id"]; ?>" name="estado" required>
+                                    <option value="" selected disabled>Cambiar estado</option>
+                                    <?php foreach ($opcionesEstado as $opcionEstado): ?>
+                                        <option value="<?php echo htmlspecialchars($opcionEstado); ?>"><?php echo htmlspecialchars($etiquetasEstadoCita[$opcionEstado]); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button type="submit">Guardar</button>
+                            </form>
+                        <?php else: ?>
+                            <span class="accion-finalizada">Sin cambios</span>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endwhile; ?>

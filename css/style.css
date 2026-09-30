@@ -1254,6 +1254,56 @@ table {
     font-size: 13px;
 }
 
+.form-estado-cita {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) auto;
+    align-items: center;
+    gap: 6px;
+    min-width: 215px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.form-estado-cita select {
+    min-height: 36px;
+    padding: 6px 8px;
+    border: 1px solid #d3dfeb;
+    border-radius: 6px;
+    background: #fff;
+    color: #294b6b;
+    font: inherit;
+}
+
+.form-estado-cita button {
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    background: #1976e8;
+    font: inherit;
+    cursor: pointer;
+}
+
+.form-estado-cita button:hover {
+    background: #0d64ce;
+}
+
+.accion-finalizada {
+    color: #71809a;
+    font-size: 12px;
+}
+
 th {
     background: #eef6ff;
 
@@ -2459,5 +2509,51 @@ a:focus-visible {
         width: 100%;
         text-align: center;
     }
+}
+
+.form-estado-cita {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) auto;
+    align-items: center;
+    gap: 6px;
+    min-width: 215px;
+}
+
+.form-estado-cita select {
+    min-height: 36px;
+    padding: 6px 8px;
+    border: 1px solid #ccd8e1;
+    border-radius: 6px;
+    background: #fff;
+    color: #294b6b;
+    font: inherit;
+}
+
+.form-estado-cita button {
+    min-height: 36px;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    background: #1976d2;
+    font: inherit;
+    cursor: pointer;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.accion-finalizada {
+    color: #71809a;
+    font-size: 12px;
 }
 }
