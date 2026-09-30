@@ -126,6 +126,7 @@ if ($rol == 2) {
     // Últimas citas
     $sql = "
         SELECT
+            c.id,
             c.fecha,
             c.hora,
             c.estado,
