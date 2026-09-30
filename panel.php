@@ -29,6 +29,10 @@ $canceladas = 0;
 
 $citas = [];
 $datosEspecialidades = [];
+$pacientesRegistrados = 0;
+$doctoresRegistrados = 0;
+$citasDeHoy = 0;
+$citasProximosSieteDias = 0;
 
 
 /* =====================================================
@@ -42,6 +46,24 @@ if ($rol == 2) {
     $sql = "SELECT COUNT(*) AS total FROM citas";
     $resultado = $conexion->query($sql);
     $totalCitas = (int)$resultado->fetch_assoc()["total"];
+
+    $sqlResumen = "
+        SELECT
+            (SELECT COUNT(*) FROM pacientes) AS pacientes,
+            (SELECT COUNT(*) FROM doctores) AS doctores,
+            (SELECT COUNT(*) FROM citas
+             WHERE fecha = CURDATE() AND estado != 'cancelada') AS citas_hoy,
+            (SELECT COUNT(*) FROM citas
+             WHERE fecha > CURDATE()
+               AND fecha <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+               AND estado IN ('pendiente', 'confirmada')) AS citas_proximos_siete_dias
+    ";
+
+    $resumenAdmin = $conexion->query($sqlResumen)->fetch_assoc();
+    $pacientesRegistrados = (int)$resumenAdmin["pacientes"];
+    $doctoresRegistrados = (int)$resumenAdmin["doctores"];
+    $citasDeHoy = (int)$resumenAdmin["citas_hoy"];
+    $citasProximosSieteDias = (int)$resumenAdmin["citas_proximos_siete_dias"];
 
     // Estados
     $sql = "
@@ -113,7 +135,8 @@ if ($rol == 2) {
         INNER JOIN doctores d
             ON c.doctor_id = d.id
 
-        ORDER BY c.fecha DESC, c.hora DESC
+        ORDER BY c.fecha DESC, c.hora DESC, c.id DESC
+        LIMIT 12
     ";
 
     $resultado = $conexion->query($sql);
@@ -549,7 +572,7 @@ if ($rol == 0) {
     <?php if ($rol == 2): ?>
 
 
-        <div class="tarjetas">
+        <div class="tarjetas admin-tarjetas">
 
             <!-- TOTAL -->
             <button
@@ -646,6 +669,53 @@ if ($rol == 0) {
 
             </button>
 
+            <button
+                type="button"
+                class="tarjeta tarjeta-filtro"
+                data-filtro="cancelada"
+            >
+
+                <div class="tarjeta-icono rojo">
+                    ×
+                </div>
+
+                <div class="tarjeta-info">
+
+                    <h3>Canceladas</h3>
+
+                    <div class="numero">
+                        <?php echo $canceladas; ?>
+                    </div>
+
+                </div>
+
+            </button>
+
+        </div>
+
+
+        <div class="info-grid admin-info-grid">
+
+            <div class="info-card">
+                <small>Pacientes registrados</small>
+                <strong><?php echo $pacientesRegistrados; ?></strong>
+            </div>
+
+            <div class="info-card">
+                <small>Doctores registrados</small>
+                <strong><?php echo $doctoresRegistrados; ?></strong>
+            </div>
+
+            <div class="info-card">
+                <small>Citas de hoy</small>
+                <strong><?php echo $citasDeHoy; ?></strong>
+            </div>
+
+            <div class="info-card">
+                <small>Citas próximos 7 días</small>
+                <strong><?php echo $citasProximosSieteDias; ?></strong>
+            </div>
+
         </div>
 
 
@@ -689,7 +759,7 @@ if ($rol == 0) {
             <div class="seccion-header">
 
                 <h2>
-                    📋 Últimas citas
+                    📋 Últimas 12 citas
                 </h2>
 
                 <a href="reporte_citas"
@@ -704,7 +774,7 @@ if ($rol == 0) {
 
             <div class="filtro-resultado">
                 <span>
-                    Mostrando: <strong class="textoFiltro">Todas las citas</strong>
+                    Mostrando: <strong class="textoFiltro">Todas las últimas 12</strong>
                 </span>
                 <span>
                     <strong class="cantidadFiltro"><?php echo count($citas); ?></strong> resultado(s)

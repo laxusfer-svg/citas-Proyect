@@ -1333,6 +1333,14 @@ tr:hover td {
     margin-bottom: 22px;
 }
 
+.admin-info-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.admin-tarjetas {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
 .info-card {
     background: white;
 
@@ -1387,9 +1395,17 @@ tr:hover td {
             repeat(2, 1fr);
     }
 
+    .admin-tarjetas {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .info-grid {
         grid-template-columns:
             repeat(2, 1fr);
+    }
+
+    .admin-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
 }
@@ -1511,6 +1527,10 @@ tr:hover td {
     .tarjeta {
         gap: 10px;
         padding: 14px;
+
+    .admin-tarjetas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
     }
 
     .tarjeta-icono {
@@ -1525,6 +1545,10 @@ tr:hover td {
 
     .info-grid {
         grid-template-columns: 1fr;
+    }
+
+    .admin-info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .seccion {

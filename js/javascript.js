@@ -178,10 +178,11 @@ function inicializarFiltroCitas() {
                 mensaje.classList.toggle("visible", cantidad === 0);
             });
 
-            let texto = "Todas las citas";
+            let texto = "Todas las últimas 12";
             if (filtro === "atendida") texto = "Citas atendidas";
             if (filtro === "pendiente") texto = "Citas pendientes";
             if (filtro === "confirmada") texto = "Citas confirmadas";
+            if (filtro === "cancelada") texto = "Citas canceladas";
 
             textos.forEach(function (elemento) {
                 elemento.textContent = texto;
