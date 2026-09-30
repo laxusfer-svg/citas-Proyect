@@ -3,7 +3,7 @@ session_start();
 include "conexion.php";
 
 if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"])) {
-    header("Location: index.php");
+    header("Location: /");
     exit;
 }
 
@@ -412,7 +412,7 @@ if ($rol == 0) {
 
     <nav class="menu">
 
-        <a href="panel.php" class="activo">
+        <a href="panel" class="activo">
             <div class="menu-icon">⌂</div>
             <span>Inicio</span>
         </a>
@@ -430,12 +430,12 @@ if ($rol == 0) {
                 <span>Doctores</span>
             </a>
 
-            <a href="reporte_citas.php">
+            <a href="reporte_citas">
                 <div class="menu-icon">📅</div>
                 <span>Citas</span>
             </a>
 
-            <a href="reporte_citas.php">
+            <a href="reporte_citas">
                 <div class="menu-icon">📊</div>
                 <span>Reportes</span>
             </a>
@@ -447,19 +447,19 @@ if ($rol == 0) {
 
         <?php elseif ($rol == 1): ?>
 
-            <a href="panel.php">
+            <a href="panel">
                 <div class="menu-icon">📅</div>
                 <span>Mis citas</span>
             </a>
 
         <?php elseif ($rol == 0): ?>
 
-            <a href="sacar_cita.php">
+            <a href="sacar_cita">
                 <div class="menu-icon">📅</div>
                 <span>Sacar cita</span>
             </a>
 
-            <a href="panel.php">
+            <a href="panel">
                 <div class="menu-icon">📋</div>
                 <span>Mis citas</span>
             </a>
@@ -471,7 +471,7 @@ if ($rol == 0) {
 
     <div class="cerrar-sesion">
 
-        <a href="logout.php"
+        <a href="logout"
            class="menu">
 
             <div class="enlace-cerrar-sesion">
@@ -692,7 +692,7 @@ if ($rol == 0) {
                     📋 Últimas citas
                 </h2>
 
-                <a href="reporte_citas.php"
+                <a href="reporte_citas"
                    class="boton">
 
                     📊 Ver reporte completo
@@ -1186,7 +1186,7 @@ if ($rol == 0) {
 
         <div class="acciones">
 
-            <a href="sacar_cita.php"
+            <a href="sacar_cita"
                class="boton boton-verde">
 
                 ➕ Sacar nueva cita

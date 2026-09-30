@@ -3,7 +3,7 @@ session_start();
 include "conexion.php";
 
 if (!isset($_SESSION["id"]) || $_SESSION["rol"] != 2) {
-    header("Location: index.php");
+    header("Location: /");
     exit;
 }
 
@@ -257,7 +257,7 @@ $resultDetalle = $stmt->get_result();
             </div>
 
             <button type="submit">🔎 Buscar</button>
-            <a href="reporte_citas.php" class="boton boton-limpiar">Limpiar</a>
+            <a href="reporte_citas" class="boton boton-limpiar">Limpiar</a>
         </form>
     </div>
 
@@ -424,7 +424,7 @@ $resultDetalle = $stmt->get_result();
         </table>
     </div>
 
-    <a href="panel.php" class="boton">⬅ Volver al panel</a>
+    <a href="panel" class="boton">⬅ Volver al panel</a>
 
 </div>
 

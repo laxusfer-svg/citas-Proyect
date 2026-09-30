@@ -5,7 +5,7 @@ include "conexion.php";
 
 // Solo puede acceder un doctor
 if (!isset($_SESSION["id"]) || $_SESSION["rol"] != 1) {
-    header("Location: index.php");
+    header("Location: /");
     exit;
 }
 
@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($estadoActual === $estado) {
         $conexion->commit();
-        header("Location: panel.php");
+        header("Location: panel");
         exit;
     }
 
@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt->execute()) {
 
         $conexion->commit();
-        header("Location: panel.php");
+        header("Location: panel");
         exit;
 
     } else {

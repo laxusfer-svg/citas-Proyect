@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["usuario"] = $datos["usuario"];
             $_SESSION["rol"] = (int)$datos["rol"];
 
-            header("Location: panel.php");
+            header("Location: panel");
             exit;
         }
 

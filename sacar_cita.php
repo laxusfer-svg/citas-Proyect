@@ -7,7 +7,7 @@ include "conexion.php";
 ===================================================== */
 
 if (!isset($_SESSION["id"]) || $_SESSION["rol"] != 0) {
-    header("Location: index.php");
+    header("Location: /");
     exit;
 }
 
@@ -334,20 +334,20 @@ $resultDoctores = $conexion->query($sqlDoctores);
 
 <body class="page-reserva">
 
-<div class="contenedor">
-
-<div class="cabecera">
-
-<h1>📅 Sacar nueva cita</h1>
-
-<p>
-Paciente:
-<strong>
-<?php echo htmlspecialchars($paciente["nombres"] . " " . $paciente["apellidos"]); ?>
-</strong>
-</p>
-
-</div>
+<main class="reserva-overlay">
+<section class="modal-cita" role="dialog" aria-modal="true" aria-labelledby="tituloReserva">
+<header class="modal-cita-header">
+    <div>
+        <p class="modal-eyebrow">AGENDA MÉDICA / NUEVA CITA</p>
+        <h1 id="tituloReserva">Agenda tu consulta</h1>
+        <p class="modal-subtitulo">Elige al profesional, la fecha y un horario disponible.</p>
+    </div>
+    <a href="panel" class="modal-cerrar" aria-label="Cerrar y volver al panel" title="Volver al panel">&times;</a>
+    <div class="modal-paciente">
+        <span>Paciente</span>
+        <strong><?php echo htmlspecialchars($paciente["nombres"] . " " . $paciente["apellidos"]); ?></strong>
+    </div>
+</header>
 
 <div class="formulario">
 
@@ -361,11 +361,14 @@ Paciente:
 
 <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, "UTF-8"); ?>">
 
+<div class="reserva-grid">
+<div class="reserva-columna">
+
 <!-- DOCTOR -->
 <div class="campo">
-<label for="doctor_id">🩺 Seleccione el doctor</label>
+<label for="doctor_id">Profesional médico</label>
 <select name="doctor_id" id="doctor_id" required>
-<option value="">-- Seleccione un doctor --</option>
+<option value="">Selecciona un doctor</option>
 <?php
 if ($resultDoctores->num_rows > 0) {
     while ($doctor = $resultDoctores->fetch_assoc()) {
@@ -394,15 +397,15 @@ if ($resultDoctores->num_rows > 0) {
 
 <!-- INFORMACIÓN DEL DOCTOR -->
 <div class="info-doctor" id="infoDoctor">
-🩺 Especialidad: <strong id="especialidadDoctor"></strong><br>
-⏰ Horario: <strong id="horarioDoctor"></strong><br>
-🍽️ Refrigerio: <strong id="refrigerioDoctor"></strong><br>
-⌛ Duración de la cita: <strong>30 minutos</strong>
+<div><span>Especialidad</span><strong id="especialidadDoctor"></strong></div>
+<div><span>Atención</span><strong id="horarioDoctor"></strong></div>
+<div><span>Refrigerio</span><strong id="refrigerioDoctor"></strong></div>
+<div><span>Duración</span><strong>30 minutos</strong></div>
 </div>
 
 <!-- CALENDARIO INTERACTIVO -->
 <div class="campo">
-<label>📅 Seleccione la fecha en el calendario</label>
+<label id="etiquetaFecha">Fecha de la consulta</label>
 <div class="calendario-wrapper">
     <div id="calendarioVisor"></div>
 </div>
@@ -410,10 +413,13 @@ if ($resultDoctores->num_rows > 0) {
 <input type="hidden" name="fecha" id="fecha" required>
 </div>
 
+</div>
+<div class="reserva-columna reserva-columna-horarios">
+
 <!-- HORARIOS -->
 <div class="campo">
-<label>⏰ Horarios disponibles</label>
-<div id="mensajeHorarios">Seleccione primero un doctor y una fecha.</div>
+<label>Horario disponible</label>
+<div id="mensajeHorarios" aria-live="polite">Selecciona un doctor y una fecha para consultar los turnos.</div>
 <div id="listaHorarios" class="horarios"></div>
 </div>
 
@@ -421,23 +427,26 @@ if ($resultDoctores->num_rows > 0) {
 
 <!-- MOTIVO -->
 <div class="campo">
-<label for="motivo">📝 Motivo de la consulta</label>
-<textarea name="motivo" id="motivo" placeholder="Describa brevemente el motivo de su consulta..."></textarea>
+<label for="motivo">Motivo de consulta <span class="opcional">Opcional</span></label>
+<textarea name="motivo" id="motivo" placeholder="Cuéntanos brevemente el motivo de tu consulta"></textarea>
+</div>
+
+</div>
 </div>
 
 <!-- BOTONES -->
-<div class="botones">
+<div class="botones reserva-acciones">
 <button type="submit" class="btn-guardar" id="btnGuardar" disabled>
-📅 Registrar cita
+Confirmar cita
 </button>
-<a href="panel.php" class="boton btn-volver">⬅ Volver</a>
+<a href="panel" class="boton btn-volver">Cancelar</a>
 </div>
 
 </form>
 
 </div>
-
-</div>
+</section>
+</main>
 
 <!-- Scripts de Flatpickr (Calendario) -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -456,6 +465,13 @@ const infoDoctor = document.getElementById("infoDoctor");
 const especialidadDoctor = document.getElementById("especialidadDoctor");
 const horarioDoctor = document.getElementById("horarioDoctor");
 const refrigerioDoctor = document.getElementById("refrigerioDoctor");
+const enlaceCerrar = document.querySelector(".modal-cerrar");
+
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        window.location.href = enlaceCerrar.href;
+    }
+});
 
 /* =====================================================
    INICIALIZAR CALENDARIO FLATPICKR
@@ -525,7 +541,7 @@ function cargarHorarios() {
 
     mensajeHorarios.innerHTML = '<div class="cargando">⏳ Consultando horarios...</div>';
 
-    fetch("horarios_disponibles.php?doctor_id=" + encodeURIComponent(doctorId) + "&fecha=" + encodeURIComponent(fecha))
+    fetch("horarios_disponibles?doctor_id=" + encodeURIComponent(doctorId) + "&fecha=" + encodeURIComponent(fecha))
     .then(function(response) {
         return response.json();
     })
@@ -547,17 +563,22 @@ function cargarHorarios() {
 
         data.horarios.forEach(function(horario) {
 
-            const boton = document.createElement("div");
+            const boton = document.createElement("button");
+            boton.type = "button";
             boton.className = "horario";
             boton.textContent = horario.substring(0, 5);
+            boton.setAttribute("aria-pressed", "false");
+            boton.setAttribute("aria-label", "Seleccionar horario " + horario.substring(0, 5));
 
             boton.addEventListener("click", function() {
 
                 document.querySelectorAll(".horario").forEach(function(elemento) {
                     elemento.classList.remove("seleccionado");
+                    elemento.setAttribute("aria-pressed", "false");
                 });
 
                 boton.classList.add("seleccionado");
+                boton.setAttribute("aria-pressed", "true");
                 horaInput.value = horario;
                 btnGuardar.disabled = false;
             });

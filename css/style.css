@@ -2011,4 +2011,429 @@ button,
         text-align: center;
     }
 }
+
+:scope {
+    padding: 0;
+    color: #193438;
+    background: #e9f0ef;
+    overflow-x: hidden;
+}
+
+.reserva-overlay {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 24px;
+    background: linear-gradient(145deg, #e8f1f0 0%, #f4f6f3 55%, #e7edf2 100%);
+}
+
+.modal-cita {
+    width: min(100%, 1000px);
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid rgba(20, 58, 61, .1);
+    border-radius: 20px;
+    box-shadow: 0 26px 80px rgba(21, 53, 57, .2);
+    animation: reserva-aparece .24s ease-out both;
+}
+
+@keyframes reserva-aparece {
+    from { opacity: 0; transform: translateY(10px) scale(.99); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-cita-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 12px 20px;
+    padding: 26px 30px 20px;
+    color: #fff;
+    background: #124e50;
+}
+
+.modal-eyebrow {
+    margin: 0 0 8px;
+    color: #a8d8d0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.modal-cita-header h1 {
+    margin: 0;
+    color: #fff;
+    font-size: 27px;
+    line-height: 1.2;
+}
+
+.modal-subtitulo {
+    margin: 8px 0 0;
+    color: #d0e4e1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.modal-cerrar {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, .24);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 27px;
+    line-height: 1;
+    text-decoration: none;
+    transition: background .18s ease, transform .18s ease;
+}
+
+.modal-cerrar:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .14);
+    transform: rotate(90deg);
+}
+
+.modal-cerrar:focus-visible,
+button:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+    outline: 3px solid #f4bc58;
+    outline-offset: 3px;
+}
+
+.modal-paciente {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, .18);
+    color: #c8e0dc;
+    font-size: 13px;
+}
+
+.modal-paciente strong {
+    color: #fff;
+    font-weight: 600;
+}
+
+.formulario {
+    padding: 26px 30px 24px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.reserva-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr);
+    gap: 28px;
+}
+
+.reserva-columna {
+    min-width: 0;
+}
+
+.reserva-columna-horarios {
+    padding-left: 28px;
+    border-left: 1px solid #e5eceb;
+}
+
+.campo {
+    margin-bottom: 20px;
+}
+
+.campo > label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 9px;
+    color: #21464a;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.opcional {
+    color: #819397;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.campo select,
+.campo textarea {
+    min-height: 48px;
+    border-color: #d5e0df;
+    border-radius: 9px;
+    color: #193438;
+    background: #fff;
+    font: inherit;
+}
+
+.campo select:focus,
+.campo textarea:focus {
+    border-color: #24847c;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(36, 132, 124, .12);
+}
+
+.campo textarea {
+    min-height: 112px;
+    padding: 12px 14px;
+}
+
+.campo textarea::placeholder {
+    color: #8b9c9e;
+}
+
+.info-doctor {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 18px;
+    margin: -4px 0 20px;
+    border: 1px solid #d9eae7;
+    border-left: 4px solid #27867d;
+    border-radius: 10px;
+    background: #f3f9f7;
+    line-height: 1.4;
+}
+
+.info-doctor.visible {
+    display: grid;
+}
+
+.info-doctor div {
+    display: grid;
+    gap: 3px;
+}
+
+.info-doctor span {
+    color: #71888a;
+    font-size: 11px;
+}
+
+.info-doctor strong {
+    color: #21464a;
+    font-size: 13px;
+}
+
+.calendario-wrapper {
+    justify-content: center;
+    padding: 10px;
+    overflow: hidden;
+    border-color: #e2e9e8;
+    border-radius: 11px;
+    background: #fbfcfb;
+}
+
+.flatpickr-calendar.inline {
+    width: 100%;
+    max-width: 308px;
+    box-shadow: none;
+}
+
+.horarios {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.horario {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 6px;
+    border: 1px solid #c8ddda;
+    border-radius: 9px;
+    color: #286d68;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    background: #fff;
+    transition: border-color .16s ease, background .16s ease, color .16s ease;
+}
+
+.horario:hover,
+.horario.seleccionado {
+    border-color: #176b65;
+    color: #fff;
+    background: #176b65;
+}
+
+#mensajeHorarios {
+    margin: 0 0 10px;
+    color: #718589;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#mensajeHorarios strong {
+    color: #21464a;
+}
+
+.sin-horarios {
+    border-radius: 9px;
+    color: #76591c;
+    background: #fff6df;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.mensaje {
+    border-radius: 9px;
+}
+
+.botones {
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding-top: 20px;
+    border-top: 1px solid #e8eeed;
+}
+
+.btn-guardar,
+.btn-volver {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 20px;
+    border-radius: 9px;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.btn-guardar {
+    color: #fff;
+    background: #176b65;
+}
+
+.btn-guardar:hover:not(:disabled) {
+    background: #105750;
+}
+
+.btn-guardar:disabled {
+    color: #879795;
+    background: #e6eceb;
+}
+
+.btn-volver {
+    border: 1px solid #d8e2e1;
+    color: #456367;
+    background: #fff;
+}
+
+.btn-volver:hover {
+    color: #21464a;
+    background: #f3f7f6;
+}
+
+@media (max-width: 860px) {
+    .modal-cita {
+        width: min(100%, 680px);
+    }
+
+    .reserva-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+
+    .reserva-columna-horarios {
+        padding: 20px 0 0;
+        border-top: 1px solid #e5eceb;
+        border-left: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .reserva-overlay {
+        display: block;
+        min-height: 100vh;
+        min-height: 100dvh;
+        padding: 8px;
+    }
+
+    .modal-cita {
+        width: 100%;
+        max-height: calc(100vh - 16px);
+        max-height: calc(100dvh - 16px);
+        border-radius: 15px;
+    }
+
+    .modal-cita-header {
+        gap: 10px;
+        padding: 20px 18px 16px;
+    }
+
+    .modal-cita-header h1 {
+        font-size: 23px;
+    }
+
+    .modal-subtitulo {
+        max-width: 32ch;
+        font-size: 13px;
+    }
+
+    .modal-cerrar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .modal-paciente {
+        flex-wrap: wrap;
+        gap: 4px 8px;
+        font-size: 12px;
+    }
+
+    .formulario {
+        padding: 20px 16px 16px;
+    }
+
+    .calendario-wrapper {
+        padding: 6px;
+        min-width: 0;
+    }
+
+    .flatpickr-calendar.inline,
+    .flatpickr-calendar.inline .flatpickr-days,
+    .flatpickr-calendar.inline .flatpickr-innerContainer,
+    .flatpickr-calendar.inline .flatpickr-rContainer,
+    .flatpickr-calendar.inline .dayContainer,
+    .flatpickr-calendar.inline .flatpickr-weekdays,
+    .flatpickr-calendar.inline .flatpickr-weekdaycontainer {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        flex: 1 1 0 !important;
+    }
+
+    .flatpickr-calendar.inline {
+        min-width: 0 !important;
+        max-width: 308px !important;
+        flex: 0 1 100% !important;
+    }
+
+    .flatpickr-calendar.inline .flatpickr-day {
+        max-width: none !important;
+    }
+
+    .horarios {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .botones {
+        flex-direction: column;
+    }
+
+    .botones > button,
+    .botones > .boton {
+        width: 100%;
+        text-align: center;
+    }
+}
 }
