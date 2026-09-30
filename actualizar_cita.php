@@ -9,12 +9,17 @@ if (!isset($_SESSION["id"]) || $_SESSION["rol"] != 1) {
     exit;
 }
 
+if (empty($_SESSION["csrf_token"]) || !hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"] ?? "")) {
+    http_response_code(403);
+    die("Solicitud no válida.");
+}
+
 $usuario_id = $_SESSION["id"];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $cita_id = (int)$_POST["cita_id"];
-    $estado = $_POST["estado"];
+    $cita_id = (int)($_POST["cita_id"] ?? 0);
+    $estado = $_POST["estado"] ?? "";
 
     // Estados permitidos
     $estados_permitidos = [
@@ -51,6 +56,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $doctor_id = $doctor["id"];
 
+    $conexion->begin_transaction();
+
+    $sqlEstadoActual = "SELECT estado FROM citas WHERE id = ? AND doctor_id = ? FOR UPDATE";
+    $stmtEstadoActual = $conexion->prepare($sqlEstadoActual);
+    $stmtEstadoActual->bind_param("ii", $cita_id, $doctor_id);
+    $stmtEstadoActual->execute();
+    $resultadoEstadoActual = $stmtEstadoActual->get_result();
+
+    if ($resultadoEstadoActual->num_rows === 0) {
+        $conexion->rollback();
+        http_response_code(404);
+        die("Cita no encontrada.");
+    }
+
+    $estadoActual = $resultadoEstadoActual->fetch_assoc()["estado"];
+    $transiciones = [
+        "pendiente" => ["confirmada", "cancelada"],
+        "confirmada" => ["atendida", "cancelada"],
+        "atendida" => [],
+        "cancelada" => []
+    ];
+
+    if ($estadoActual !== $estado && !in_array($estado, $transiciones[$estadoActual], true)) {
+        $conexion->rollback();
+        http_response_code(400);
+        die("La transición de estado no está permitida.");
+    }
+
+    if ($estadoActual === $estado) {
+        $conexion->commit();
+        header("Location: panel.php");
+        exit;
+    }
+
 
     /*
      * Actualizar SOLO una cita
@@ -73,11 +112,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
 
+        $conexion->commit();
         header("Location: panel.php");
         exit;
 
     } else {
 
+        $conexion->rollback();
         echo "Error al actualizar la cita: " . $stmt->error;
     }
 }

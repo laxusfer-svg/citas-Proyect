@@ -45,6 +45,20 @@ if ($doctor_id <= 0 || $fecha == "") {
     exit;
 }
 
+$fechaValidada = DateTime::createFromFormat("!Y-m-d", $fecha);
+$erroresFecha = DateTime::getLastErrors();
+
+if (
+    $fechaValidada === false ||
+    ($erroresFecha !== false && ($erroresFecha["warning_count"] > 0 || $erroresFecha["error_count"] > 0)) ||
+    $fechaValidada->format("Y-m-d") !== $fecha ||
+    $fecha < date("Y-m-d")
+) {
+    header("Content-Type: application/json");
+    echo json_encode(["error" => "Seleccione una fecha válida, igual o posterior a hoy."]);
+    exit;
+}
+
 
 /* =====================================================
    OBTENER HORARIO DEL DOCTOR
@@ -130,8 +144,7 @@ $horariosOcupados = [];
 
 while ($fila = $resultCitas->fetch_assoc()) {
 
-    $horariosOcupados[] =
-        substr($fila["hora"], 0, 5);
+    $horariosOcupados[] = new DateTime($fila["hora"]);
 }
 
 
@@ -164,6 +177,8 @@ while ($inicio <= $limiteUltimaCita) {
     $horaActual = $inicio->format("H:i");
 
     $horaActualCompleta = $inicio->format("H:i:s");
+    $finCita = clone $inicio;
+    $finCita->modify("+30 minutes");
 
 
     /* =================================================
@@ -190,11 +205,6 @@ while ($inicio <= $limiteUltimaCita) {
          * cruzarse con el refrigerio.
          */
 
-        $finCita = clone $inicio;
-
-        $finCita->modify("+30 minutes");
-
-
         if (
             $inicio < $finRefrigerio &&
             $finCita > $inicioRefrigerio
@@ -209,8 +219,17 @@ while ($inicio <= $limiteUltimaCita) {
        COMPROBAR SI ESTÁ OCUPADO
     ================================================= */
 
-    $estaOcupado =
-        in_array($horaActual, $horariosOcupados);
+    $estaOcupado = false;
+
+    foreach ($horariosOcupados as $horaOcupada) {
+        $finCitaOcupada = clone $horaOcupada;
+        $finCitaOcupada->modify("+30 minutes");
+
+        if ($inicio < $finCitaOcupada && $finCita > $horaOcupada) {
+            $estaOcupado = true;
+            break;
+        }
+    }
 
 
     /* =================================================

@@ -3,7 +3,7 @@ session_start();
 include "conexion.php";
 
 if (!isset($_SESSION["id"]) || $_SESSION["rol"] != 2) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
 }
 
@@ -220,172 +220,11 @@ $resultDetalle = $stmt->get_result();
     <!-- Librería Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-            padding: 30px;
-        }
-
-        h1 {
-            color: #222;
-        }
-
-        .contenedor {
-            max-width: 1400px;
-            margin: auto;
-        }
-
-        .tarjetas {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .tarjeta {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
-        }
-
-        .tarjeta h3 {
-            margin: 0 0 10px;
-        }
-
-        .numero {
-            font-size: 30px;
-            font-weight: bold;
-        }
-
-        .filtros {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .filtros form {
-            display: flex;
-            gap: 15px;
-            align-items: end;
-            flex-wrap: wrap;
-        }
-
-        .campo {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .campo label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input {
-            padding: 9px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button,
-        .boton {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            background: #1976d2;
-            color: white;
-        }
-
-        .boton-limpiar {
-            background: #777;
-        }
-
-        .seccion {
-            background: white;
-            padding: 20px;
-            margin-bottom: 25px;
-            border-radius: 10px;
-            overflow-x: auto;
-        }
-
-        /* Contenedores de Gráficos */
-        .graficos-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .tarjeta-grafico {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
-        }
-
-        .tarjeta-grafico-full {
-            grid-column: 1 / -1;
-        }
-
-        .contenedor-canvas {
-            position: relative;
-            height: 320px;
-            width: 100%;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background: #f0f2f5;
-        }
-
-        .estado-atendida {
-            color: green;
-            font-weight: bold;
-        }
-
-        .estado-pendiente {
-            color: #d68910;
-            font-weight: bold;
-        }
-
-        .estado-confirmada {
-            color: #1976d2;
-            font-weight: bold;
-        }
-
-        .estado-cancelada {
-            color: red;
-            font-weight: bold;
-        }
-
-        @media(max-width: 900px) {
-            .tarjetas {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .graficos-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
+<body class="page-reporte">
 
 <div class="contenedor">
 

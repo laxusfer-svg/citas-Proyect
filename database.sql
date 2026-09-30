@@ -182,6 +182,10 @@ CREATE TABLE citas (
 
     ) NOT NULL DEFAULT 'pendiente',
 
+    turno_activo TINYINT GENERATED ALWAYS AS (
+        CASE WHEN estado = 'cancelada' THEN NULL ELSE 1 END
+    ) STORED,
+
     observaciones TEXT NULL,
 
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -222,9 +226,9 @@ CREATE TABLE citas (
        EN LA MISMA FECHA Y HORA
     ----------------------------------------------- */
 
-    CONSTRAINT unique_doctor_fecha_hora
+    CONSTRAINT unique_doctor_fecha_hora_activa
 
-        UNIQUE (doctor_id, fecha, hora)
+        UNIQUE (doctor_id, fecha, hora, turno_activo)
 
 ) ENGINE=InnoDB;
 

@@ -3,8 +3,12 @@ session_start();
 include "conexion.php";
 
 if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
+}
+
+if ((int)$_SESSION["rol"] === 1 && empty($_SESSION["csrf_token"])) {
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
 $usuario_id = (int)$_SESSION["id"];
@@ -377,696 +381,13 @@ if ($rol == 0) {
 <?php endif; ?>
 
 
-<style>
 
-/* =====================================================
-   GENERAL
-===================================================== */
 
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f4f7fb;
-    color: #17345c;
-}
-
-a {
-    text-decoration: none;
-}
-
-
-/* =====================================================
-   SIDEBAR
-===================================================== */
-
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-
-    width: 220px;
-    height: 100vh;
-
-    background: linear-gradient(
-        180deg,
-        #102f55,
-        #0d2949
-    );
-
-    color: white;
-
-    padding: 20px 12px;
-
-    z-index: 1000;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 10px;
-
-    margin-bottom: 25px;
-}
-
-.logo-icon {
-    width: 42px;
-    height: 42px;
-
-    background: #1976e8;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 23px;
-}
-
-.logo-text {
-    font-size: 17px;
-    font-weight: bold;
-    line-height: 1.2;
-}
-
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-}
-
-.menu a {
-    display: flex;
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 13px 12px;
-
-    color: #e6eef8;
-
-    border-radius: 9px;
-
-    font-size: 14px;
-
-    transition: .2s;
-}
-
-.menu a:hover {
-    background: rgba(255,255,255,.10);
-}
-
-.menu a.activo {
-    background: #1478e8;
-    color: white;
-}
-
-.menu-icon {
-    width: 25px;
-    text-align: center;
-    font-size: 18px;
-}
-
-.cerrar-sesion {
-    position: absolute;
-
-    bottom: 20px;
-    left: 12px;
-    right: 12px;
-}
-
-
-/* =====================================================
-   CONTENIDO
-===================================================== */
-
-.contenido {
-    margin-left: 220px;
-
-    min-height: 100vh;
-
-    padding: 30px;
-}
-
-
-/* =====================================================
-   TOP
-===================================================== */
-
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 25px;
-}
-
-.titulo h1 {
-    margin: 0;
-
-    font-size: 28px;
-
-    color: #173b68;
-}
-
-.titulo p {
-    margin: 7px 0 0;
-
-    color: #68809d;
-
-    font-size: 14px;
-}
-
-.usuario {
-    background: white;
-
-    padding: 10px 15px;
-
-    border-radius: 10px;
-
-    box-shadow: 0 3px 12px rgba(0,0,0,.06);
-
-    font-size: 14px;
-}
-
-
-/* =====================================================
-   TARJETAS KPI
-===================================================== */
-
-.tarjetas {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 16px;
-
-    margin-bottom: 22px;
-}
-
-.tarjeta {
-    background: white;
-
-    border-radius: 14px;
-
-    padding: 20px;
-
-    box-shadow:
-        0 5px 18px rgba(20,60,100,.07);
-
-    border: 1px solid #e8eef5;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-}
-
-.tarjeta-icono {
-    width: 52px;
-    height: 52px;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 24px;
-
-    flex-shrink: 0;
-}
-
-.azul {
-    background: #e6f1ff;
-    color: #1976e8;
-}
-
-.verde {
-    background: #e2f8f1;
-    color: #10ad7b;
-}
-
-.amarillo {
-    background: #fff5dd;
-    color: #f2a900;
-}
-
-.rojo {
-    background: #ffe8eb;
-    color: #ed3d48;
-}
-
-.tarjeta-info {
-    min-width: 0;
-}
-
-.tarjeta-info h3 {
-    margin: 0 0 5px;
-
-    font-size: 13px;
-
-    color: #68809d;
-
-    font-weight: normal;
-}
-
-.numero {
-    font-size: 28px;
-
-    font-weight: bold;
-
-    color: #173b68;
-}
-
-
-/* =====================================================
-   BOTONES
-===================================================== */
-
-.boton {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    padding: 11px 17px;
-
-    background: #1976e8;
-
-    color: white;
-
-    border-radius: 8px;
-
-    border: none;
-
-    cursor: pointer;
-
-    font-size: 14px;
-
-    transition: .2s;
-}
-
-.boton:hover {
-    background: #0d64ce;
-}
-
-.boton-verde {
-    background: #10ad7b;
-}
-
-.boton-verde:hover {
-    background: #078d64;
-}
-
-
-/* =====================================================
-   GRAFICOS
-===================================================== */
-
-.graficos {
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 18px;
-
-    margin-bottom: 22px;
-}
-
-.grafico {
-    background: white;
-
-    border-radius: 14px;
-
-    padding: 20px;
-
-    border: 1px solid #e8eef5;
-
-    box-shadow:
-        0 5px 18px rgba(20,60,100,.07);
-}
-
-.grafico h2 {
-    margin: 0 0 18px;
-
-    font-size: 17px;
-
-    color: #173b68;
-}
-
-.canvas-box {
-    height: 280px;
-
-    position: relative;
-}
-
-
-/* =====================================================
-   TABLAS
-===================================================== */
-
-.seccion {
-    background: white;
-
-    border-radius: 14px;
-
-    padding: 20px;
-
-    margin-bottom: 22px;
-
-    border: 1px solid #e8eef5;
-
-    box-shadow:
-        0 5px 18px rgba(20,60,100,.07);
-
-    overflow-x: auto;
-}
-
-.seccion-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 17px;
-}
-
-.seccion h2 {
-    margin: 0;
-
-    font-size: 18px;
-
-    color: #173b68;
-}
-
-table {
-    width: 100%;
-
-    border-collapse: collapse;
-
-    font-size: 13px;
-}
-
-th {
-    background: #eef6ff;
-
-    color: #24517e;
-
-    padding: 13px 10px;
-
-    text-align: left;
-
-    white-space: nowrap;
-}
-
-td {
-    padding: 13px 10px;
-
-    border-bottom: 1px solid #edf1f5;
-
-    color: #49647f;
-
-    white-space: nowrap;
-}
-
-tr:hover td {
-    background: #f8fbff;
-}
-
-
-/* =====================================================
-   ESTADOS
-===================================================== */
-
-.estado {
-    display: inline-block;
-
-    padding: 6px 11px;
-
-    border-radius: 20px;
-
-    font-size: 12px;
-
-    font-weight: bold;
-}
-
-.estado-atendida {
-    background: #dcf8ed;
-    color: #07865f;
-}
-
-.estado-pendiente {
-    background: #fff0c9;
-    color: #a96e00;
-}
-
-.estado-confirmada {
-    background: #dcecff;
-    color: #1267c5;
-}
-
-.estado-cancelada {
-    background: #ffe1e5;
-    color: #d42f3b;
-}
-
-
-/* =====================================================
-   PERFIL / INFORMACION
-===================================================== */
-
-.info-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 22px;
-}
-
-.info-card {
-    background: white;
-
-    padding: 20px;
-
-    border-radius: 14px;
-
-    border: 1px solid #e8eef5;
-
-    box-shadow:
-        0 5px 18px rgba(20,60,100,.07);
-}
-
-.info-card small {
-    color: #7a91a9;
-}
-
-.info-card strong {
-    display: block;
-
-    margin-top: 7px;
-
-    color: #173b68;
-
-    font-size: 16px;
-}
-
-
-/* =====================================================
-   ACCIONES
-===================================================== */
-
-.acciones {
-    display: flex;
-
-    gap: 12px;
-
-    flex-wrap: wrap;
-
-    margin-bottom: 22px;
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media(max-width: 1100px) {
-
-    .tarjetas {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .info-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-}
-
-@media(max-width: 800px) {
-
-    .sidebar {
-        width: 70px;
-
-        padding: 15px 8px;
-    }
-
-    .logo-text,
-    .menu span {
-        display: none;
-    }
-
-    .logo {
-        justify-content: center;
-    }
-
-    .menu a {
-        justify-content: center;
-    }
-
-    .contenido {
-        margin-left: 70px;
-
-        padding: 20px;
-    }
-
-    .graficos {
-        grid-template-columns: 1fr;
-    }
-
-}
-
-@media(max-width: 600px) {
-
-    .tarjetas {
-        grid-template-columns: 1fr;
-    }
-
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .topbar {
-        align-items: flex-start;
-
-        flex-direction: column;
-
-        gap: 15px;
-    }
-
-}
-/* =====================================================
-   TARJETAS COMO FILTRO
-===================================================== */
-
-.tarjeta-filtro {
-    width: 100%;
-    border: 2px solid transparent;
-    cursor: pointer;
-    text-align: left;
-
-    transition:
-        transform .2s,
-        box-shadow .2s,
-        border-color .2s,
-        background .2s;
-}
-
-.tarjeta-filtro:hover {
-    transform: translateY(-3px);
-
-    box-shadow:
-        0 8px 25px rgba(20,60,100,.12);
-}
-
-/* TARJETA SELECCIONADA */
-
-.tarjeta-filtro.activo {
-    border-color: #1976e8;
-
-    background: #f7fbff;
-
-    box-shadow:
-        0 7px 22px rgba(25,118,232,.15);
-}
-
-/* Indicador superior */
-
-.tarjeta-filtro.activo::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 18px;
-    right: 18px;
-
-    height: 4px;
-
-    background: #1976e8;
-
-    border-radius:
-        0 0 5px 5px;
-}
-
-
-/* =====================================================
-   MENSAJE DEL FILTRO
-===================================================== */
-
-.filtro-resultado {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    background: #eef6ff;
-
-    border: 1px solid #d5e8fb;
-
-    color: #24517e;
-
-    padding: 12px 15px;
-
-    border-radius: 9px;
-
-    margin-bottom: 15px;
-
-    font-size: 13px;
-}
-
-.filtro-resultado strong {
-    color: #173b68;
-}
-
-.tarjeta {
-    position: relative;
-}
-
-</style>
-
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 
-<body>
+<body class="page-panel">
 
 
 <!-- =====================================================
@@ -1153,14 +474,7 @@ tr:hover td {
         <a href="logout.php"
            class="menu">
 
-            <div style="
-                display:flex;
-                align-items:center;
-                gap:12px;
-                padding:13px 12px;
-                color:white;
-                border-radius:9px;
-            ">
+            <div class="enlace-cerrar-sesion">
 
                 <span>🚪</span>
 
@@ -1526,8 +840,8 @@ tr:hover td {
 
                 <?php endforeach; ?>
 
-                <tr class="fila-sin-resultados" style="display:none;">
-                    <td colspan="7" style="text-align:center;padding:30px;">
+                <tr class="fila-sin-resultados">
+                    <td colspan="7" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -1536,8 +850,7 @@ tr:hover td {
 
                     <tr>
 
-                        <td colspan="7"
-                            style="text-align:center;padding:30px;">
+                        <td colspan="7" class="mensaje-tabla-vacio">
 
                             No hay citas registradas.
 
@@ -1800,8 +1113,8 @@ tr:hover td {
 
                 <?php endforeach; ?>
 
-                <tr class="fila-sin-resultados" style="display:none;">
-                    <td colspan="6" style="text-align:center;padding:30px;">
+                <tr class="fila-sin-resultados">
+                    <td colspan="6" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -1810,8 +1123,7 @@ tr:hover td {
 
                     <tr>
 
-                        <td colspan="6"
-                            style="text-align:center;padding:30px;">
+                        <td colspan="6" class="mensaje-tabla-vacio">
 
                             No tienes citas registradas.
 
@@ -2122,8 +1434,8 @@ tr:hover td {
 
                 <?php endforeach; ?>
 
-                <tr class="fila-sin-resultados" style="display:none;">
-                    <td colspan="6" style="text-align:center;padding:30px;">
+                <tr class="fila-sin-resultados">
+                    <td colspan="6" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -2132,11 +1444,7 @@ tr:hover td {
 
                     <tr>
 
-                        <td colspan="6"
-                            style="
-                                text-align:center;
-                                padding:30px;
-                            ">
+                        <td colspan="6" class="mensaje-tabla-vacio">
 
                             No tienes citas registradas.
 
@@ -2333,12 +1641,12 @@ document.addEventListener("DOMContentLoaded", function () {
             filas.forEach(function (fila) {
                 const estado = fila.getAttribute("data-estado");
                 const mostrar = filtro === "todos" || estado === filtro;
-                fila.style.display = mostrar ? "" : "none";
+                fila.classList.toggle("fila-oculta", !mostrar);
                 if (mostrar) cantidad++;
             });
 
             mensajes.forEach(function (mensaje) {
-                mensaje.style.display = cantidad === 0 ? "table-row" : "none";
+                mensaje.classList.toggle("visible", cantidad === 0);
             });
 
             let texto = "Todas las citas";

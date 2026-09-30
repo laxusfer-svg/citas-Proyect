@@ -7,8 +7,12 @@ include "conexion.php";
 ===================================================== */
 
 if (!isset($_SESSION["id"]) || $_SESSION["rol"] != 0) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit;
+}
+
+if (empty($_SESSION["csrf_token"])) {
+    $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
 $usuario_id = $_SESSION["id"];
@@ -44,17 +48,36 @@ $paciente_id = $paciente["id"];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
+    if (!hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"] ?? "")) {
+        http_response_code(403);
+        die("Solicitud no válida.");
+    }
+
     $doctor_id = intval($_POST["doctor_id"] ?? 0);
     $fecha = $_POST["fecha"] ?? "";
     $hora = $_POST["hora"] ?? "";
     $motivo = trim($_POST["motivo"] ?? "");
+    $fechaValidada = DateTime::createFromFormat("!Y-m-d", $fecha);
+    $erroresFecha = DateTime::getLastErrors();
+    $horaValidada = DateTime::createFromFormat("!H:i:s", $hora);
+    $erroresHora = DateTime::getLastErrors();
 
-    if ($doctor_id <= 0 || $fecha === "" || $hora === "") {
+    $fechaValida = $fechaValidada !== false &&
+        ($erroresFecha === false || ($erroresFecha["warning_count"] === 0 && $erroresFecha["error_count"] === 0)) &&
+        $fechaValidada->format("Y-m-d") === $fecha;
 
-        $mensaje = "Complete todos los campos obligatorios.";
+    $horaValida = $horaValidada !== false &&
+        ($erroresHora === false || ($erroresHora["warning_count"] === 0 && $erroresHora["error_count"] === 0)) &&
+        $horaValidada->format("H:i:s") === $hora;
+
+    if ($doctor_id <= 0 || !$fechaValida || !$horaValida) {
+
+        $mensaje = "La fecha, la hora o el doctor seleccionados no son válidos.";
         $tipo_mensaje = "error";
 
     } else {
+
+        $conexion->begin_transaction();
 
         /* =============================================
            OBTENER HORARIO DEL DOCTOR
@@ -69,6 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 refrigerio_fin
             FROM doctores
             WHERE id = ?
+            FOR UPDATE
         ";
 
         $stmtDoctor = $conexion->prepare($sqlDoctor);
@@ -79,6 +103,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if ($resultDoctor->num_rows == 0) {
 
+            $conexion->rollback();
+
             $mensaje = "El doctor seleccionado no existe.";
             $tipo_mensaje = "error";
 
@@ -86,11 +112,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $doctor = $resultDoctor->fetch_assoc();
 
+            $sqlBloqueoPaciente = "SELECT id FROM pacientes WHERE id = ? FOR UPDATE";
+            $stmtBloqueoPaciente = $conexion->prepare($sqlBloqueoPaciente);
+            $stmtBloqueoPaciente->bind_param("i", $paciente_id);
+            $stmtBloqueoPaciente->execute();
+
             /* =========================================
                VALIDAR FECHA
             ========================================= */
 
             if ($fecha < date("Y-m-d")) {
+
+                $conexion->rollback();
 
                 $mensaje = "No puede seleccionar una fecha anterior a hoy.";
                 $tipo_mensaje = "error";
@@ -105,16 +138,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $fin = new DateTime($doctor["hora_fin"]);
 
                 $horaSeleccionada = new DateTime($hora);
+                $fechaHoraSeleccionada = DateTime::createFromFormat("!Y-m-d H:i:s", $fecha . " " . $hora);
 
                 /* Una cita dura 30 minutos */
                 $finCita = clone $horaSeleccionada;
                 $finCita->modify("+30 minutes");
 
+                $segundosDesdeInicio = $horaSeleccionada->getTimestamp() - $inicio->getTimestamp();
                 $horarioValido = true;
 
                 if (
                     $horaSeleccionada < $inicio ||
-                    $finCita > $fin
+                    $finCita > $fin ||
+                    $segundosDesdeInicio % (30 * 60) !== 0
                 ) {
                     $horarioValido = false;
                 }
@@ -147,12 +183,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 if (
                     $horarioValido &&
                     $fecha === date("Y-m-d") &&
-                    $horaSeleccionada <= new DateTime()
+                    $fechaHoraSeleccionada <= new DateTime()
                 ) {
                     $horarioValido = false;
                 }
 
                 if (!$horarioValido) {
+
+                    $conexion->rollback();
 
                     $mensaje = "El horario seleccionado no está disponible para este doctor.";
                     $tipo_mensaje = "error";
@@ -166,23 +204,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $sqlExiste = "
                         SELECT id
                         FROM citas
-                        WHERE (
-                            (doctor_id = ? AND fecha = ? AND hora = ?)
-                            OR
-                            (paciente_id = ? AND fecha = ? AND hora = ?)
-                        )
+                        WHERE fecha = ?
                         AND estado != 'cancelada'
+                        AND (
+                            (doctor_id = ? AND hora < ADDTIME(?, '00:30:00') AND ADDTIME(hora, '00:30:00') > ?)
+                            OR
+                            (paciente_id = ? AND hora < ADDTIME(?, '00:30:00') AND ADDTIME(hora, '00:30:00') > ?)
+                        )
                         LIMIT 1
+                        FOR UPDATE
                     ";
 
                     $stmtExiste = $conexion->prepare($sqlExiste);
+                    $horaFinTurno = $horaSeleccionada->format("H:i:s");
                     $stmtExiste->bind_param(
-                        "ississ",
-                        $doctor_id,
+                        "sississ",
                         $fecha,
+                        $doctor_id,
+                        $horaFinTurno,
                         $hora,
                         $paciente_id,
-                        $fecha,
+                        $horaFinTurno,
                         $hora
                     );
 
@@ -190,6 +232,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $resultExiste = $stmtExiste->get_result();
 
                     if ($resultExiste->num_rows > 0) {
+
+                        $conexion->rollback();
 
                         $mensaje = "⚠️ El horario ya está reservado o ya tienes otra cita en este mismo rango de fecha y hora.";
                         $tipo_mensaje = "error";
@@ -227,12 +271,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                         if ($stmtInsert->execute()) {
 
+                            $conexion->commit();
                             $mensaje = "✅ Cita registrada correctamente.";
                             $tipo_mensaje = "success";
 
                         } else {
 
-                            if ($conexion->errno == 1062) {
+                            $conexion->rollback();
+
+                            if ($stmtInsert->errno == 1062) {
                                 $mensaje = "⚠️ El horario acaba de ser ocupado por otro paciente. Seleccione otro horario.";
                             } else {
                                 $mensaje = "Error al registrar la cita.";
@@ -280,192 +327,12 @@ $resultDoctores = $conexion->query($sqlDoctores);
 <!-- Flatpickr CSS para el Calendario Interactivo -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-<style>
 
-* {
-    box-sizing: border-box;
-}
 
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
-    margin: 0;
-    padding: 30px;
-}
-
-.contenedor {
-    max-width: 900px;
-    margin: auto;
-}
-
-.cabecera {
-    background: #1976d2;
-    color: white;
-    padding: 25px;
-    border-radius: 12px 12px 0 0;
-}
-
-.cabecera h1 {
-    margin: 0 0 8px;
-}
-
-.formulario {
-    background: white;
-    padding: 30px;
-    border-radius: 0 0 12px 12px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.10);
-}
-
-.campo {
-    margin-bottom: 25px;
-}
-
-.campo label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-.campo select,
-.campo textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    font-size: 15px;
-}
-
-.campo textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.info-doctor {
-    display: none;
-    background: #eef6ff;
-    border-left: 5px solid #1976d2;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    line-height: 1.7;
-}
-
-/* Estilos para la integración del calendario */
-.calendario-wrapper {
-    display: flex;
-    justify-content: center;
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-}
-
-.flatpickr-calendar.inline {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.horarios {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.horario {
-    padding: 13px;
-    border: 2px solid #1976d2;
-    background: white;
-    color: #1976d2;
-    border-radius: 7px;
-    cursor: pointer;
-    text-align: center;
-    font-weight: bold;
-    transition: all 0.2s ease;
-}
-
-.horario:hover {
-    background: #1976d2;
-    color: white;
-}
-
-.horario.seleccionado {
-    background: #1976d2;
-    color: white;
-}
-
-.mensaje {
-    padding: 15px;
-    border-radius: 7px;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-.mensaje.success {
-    background: #dff5e4;
-    color: #176b2c;
-}
-
-.mensaje.error {
-    background: #fde2e2;
-    color: #a32121;
-}
-
-.sin-horarios {
-    background: #fff3cd;
-    color: #856404;
-    padding: 15px;
-    border-radius: 7px;
-}
-
-.cargando {
-    color: #1976d2;
-    font-weight: bold;
-    padding: 10px 0;
-}
-
-.botones {
-    display: flex;
-    gap: 10px;
-    margin-top: 25px;
-}
-
-button,
-.boton {
-    border: none;
-    padding: 12px 20px;
-    border-radius: 7px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.btn-guardar {
-    background: #1976d2;
-    color: white;
-}
-
-.btn-guardar:disabled {
-    background: #aaa;
-    cursor: not-allowed;
-}
-
-.btn-volver {
-    background: #777;
-    color: white;
-}
-
-@media (max-width: 700px) {
-    .horarios {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-</style>
-
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body>
+<body class="page-reserva">
 
 <div class="contenedor">
 
@@ -491,6 +358,8 @@ Paciente:
 <?php endif; ?>
 
 <form method="POST" id="formCita">
+
+<input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, "UTF-8"); ?>">
 
 <!-- DOCTOR -->
 <div class="campo">
@@ -628,10 +497,10 @@ doctorSelect.addEventListener("change", function() {
             refrigerioDoctor.textContent = "Sin refrigerio registrado";
         }
 
-        infoDoctor.style.display = "block";
+        infoDoctor.classList.add("visible");
 
     } else {
-        infoDoctor.style.display = "none";
+        infoDoctor.classList.remove("visible");
     }
 
     cargarHorarios();
