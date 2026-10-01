@@ -54,9 +54,30 @@ $citasProximosSieteDias = 0;
 
 if ($rol == 2) {
 
+    $sqlResumen = "
+        SELECT
+            (SELECT COUNT(*) FROM pacientes) AS pacientes,
+            (SELECT COUNT(*) FROM doctores) AS doctores,
+            (SELECT COUNT(*) FROM citas) AS total_citas,
+            (
+                SELECT COUNT(*)
+                FROM citas
+                WHERE fecha = CURDATE()
+                    AND estado <> 'cancelada'
+            ) AS citas_hoy,
+            (
+                SELECT COUNT(*)
+                FROM citas
+                WHERE fecha >= CURDATE()
+                    AND fecha < DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+                    AND estado <> 'cancelada'
+            ) AS citas_proximos_siete_dias
+    ";
+
     $resumenAdmin = $conexion->query($sqlResumen)->fetch_assoc();
     $pacientesRegistrados = (int)$resumenAdmin["pacientes"];
     $doctoresRegistrados = (int)$resumenAdmin["doctores"];
+    $totalCitas = (int)$resumenAdmin["total_citas"];
     $citasDeHoy = (int)$resumenAdmin["citas_hoy"];
     $citasProximosSieteDias = (int)$resumenAdmin["citas_proximos_siete_dias"];
 
