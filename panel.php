@@ -68,9 +68,9 @@ if ($rol == 2) {
             (
                 SELECT COUNT(*)
                 FROM citas
-                WHERE fecha >= CURDATE()
-                    AND fecha < DATE_ADD(CURDATE(), INTERVAL 7 DAY)
-                    AND estado <> 'cancelada'
+                WHERE fecha > CURDATE()
+                    AND fecha <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+                    AND estado IN ('pendiente', 'confirmada')
             ) AS citas_proximos_siete_dias
     ";
 
