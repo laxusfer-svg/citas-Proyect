@@ -458,6 +458,9 @@ $resultDetalle = $stmt->get_result();
                         <?php else: ?>
                             <span class="accion-finalizada">Sin cambios</span>
                         <?php endif; ?>
+                        <?php if (in_array($fila["estado"], ["pendiente", "confirmada"], true)): ?>
+                            <a class="reprogramar-link" href="reprogramar_cita?id=<?php echo (int)$fila["id"]; ?>&origen=reporte">Reprogramar</a>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 <?php endwhile; ?>

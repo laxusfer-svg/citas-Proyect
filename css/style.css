@@ -1590,6 +1590,22 @@ table {
     font-size: 12px;
 }
 
+.reprogramar-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    margin-top: 6px;
+    padding: 0 9px;
+    border: 1px solid #d2e1ef;
+    border-radius: 6px;
+    color: #315f87;
+    background: #f7fbff;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
 th {
     background: #eef6ff;
 
@@ -2151,6 +2167,22 @@ tr:hover td {
             font-weight: bold;
         }
 
+        .reprogramar-link {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            margin-top: 6px;
+            padding: 0 9px;
+            border: 1px solid #d2e1ef;
+            border-radius: 6px;
+            color: #315f87;
+            background: #f7fbff;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
         @media(max-width: 900px) {
             .tarjetas {
                 grid-template-columns: repeat(2, 1fr);
@@ -2480,6 +2512,76 @@ a:focus-visible {
 .modal-paciente strong {
     color: #fff;
     font-weight: 600;
+}
+
+.reprogramar-resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 22px;
+    padding: 14px;
+    border: 1px solid #d9eae7;
+    border-radius: 10px;
+    background: #f3f9f7;
+}
+
+.reprogramar-resumen div {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.reprogramar-resumen span {
+    color: #71888a;
+    font-size: 11px;
+}
+
+.reprogramar-resumen strong {
+    color: #21464a;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.reprogramar-fecha-form > label,
+.reprogramar-confirmar-form .campo > label {
+    display: block;
+    margin-bottom: 9px;
+    color: #21464a;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.reprogramar-fecha-controles {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+}
+
+.reprogramar-fecha-controles input[type="date"] {
+    min-width: 0;
+    min-height: 46px;
+    padding: 9px 12px;
+    border: 1px solid #d5e0df;
+    border-radius: 9px;
+    color: #193438;
+    background: #fff;
+    font: inherit;
+}
+
+.reprogramar-confirmar-form select {
+    width: 100%;
+}
+
+.reprogramar-sin-horarios {
+    margin: 8px 0 0;
+    color: #876324;
+    font-size: 13px;
+}
+
+.page-reserva .mensaje.success {
+    border-color: #b9e2cf;
+    color: #176b43;
+    background: #eaf8ef;
 }
 
 .formulario {
@@ -2820,6 +2922,14 @@ a:focus-visible {
     .modal-cita-header {
         gap: 10px;
         padding: 20px 18px 16px;
+    }
+
+    .reprogramar-resumen {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .reprogramar-fecha-controles {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .modal-cita-header h1 {
