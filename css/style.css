@@ -1,3 +1,9 @@
+:root {
+    --color-primary: #1976e8;
+    --color-primary-hover: #0d64ce;
+    --color-page-background: #f4f7fb;
+}
+
 /* page-login */
 @scope (body.page-login) {
 /* =====================================================
@@ -130,8 +136,8 @@
     background:
         linear-gradient(
             145deg,
-            #1478df,
-            #0d4fa8
+            var(--color-primary),
+            var(--color-primary-hover)
         );
 
     color: white;
@@ -207,7 +213,7 @@
 
     background: rgba(255,255,255,.95);
 
-    color: #1478df;
+    color: var(--color-primary);
 
     display: flex;
 
@@ -358,7 +364,7 @@
 
     font-size: 20px;
 
-    color: #1478df;
+    color: var(--color-primary);
 }
 
 
@@ -618,7 +624,7 @@
 
 .opciones a {
 
-    color: #1478df;
+    color: var(--color-primary);
 
     font-size: 13px;
 
@@ -932,7 +938,7 @@
 
     .sidebar .menu a.activo {
         color: #fff;
-        background: #1478e8;
+        background: var(--color-primary);
     }
 
     .sidebar .logout-button {
@@ -1142,7 +1148,7 @@
         min-height: 100vh;
         margin: 0;
         color: #17345c;
-        background: #f2f6fa;
+        background: var(--color-page-background);
         font-family: Arial, Helvetica, sans-serif;
     }
 
@@ -1435,7 +1441,7 @@
 :scope {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #f4f7fb;
+    background: var(--color-page-background);
     color: #17345c;
 }
 
@@ -1529,7 +1535,7 @@ a {
 }
 
 .menu a.activo {
-    background: #1478e8;
+    background: var(--color-primary);
     color: white;
 }
 
@@ -2301,7 +2307,7 @@ tr:hover td {
 @scope (body.page-reporte) {
 :scope {
             font-family: Arial, sans-serif;
-            background: #f3f6f8;
+            background: var(--color-page-background);
             margin: 0;
             padding: 30px;
             color: #243746;
@@ -2442,7 +2448,7 @@ tr:hover td {
         button:focus-visible,
         .boton:focus-visible,
         .reprogramar-link:focus-visible {
-            outline: 3px solid rgba(20, 120, 145, .3);
+            outline: 3px solid rgba(25, 118, 232, .3);
             outline-offset: 2px;
         }
 
@@ -2454,7 +2460,7 @@ tr:hover td {
             border-radius: 6px;
             cursor: pointer;
             text-decoration: none;
-            background: #176d82;
+            background: var(--color-primary);
             color: white;
             font-weight: 600;
             transition: background-color .16s ease, transform .16s ease;
@@ -2462,7 +2468,7 @@ tr:hover td {
 
         button:hover,
         .boton:hover {
-            background: #12586a;
+            background: var(--color-primary-hover);
         }
 
         .boton-limpiar {
@@ -2539,7 +2545,7 @@ tr:hover td {
         }
 
         .estado-confirmada {
-            color: #1976d2;
+            color: var(--color-primary);
             font-weight: bold;
         }
 
@@ -2614,7 +2620,7 @@ tr:hover td {
 
 :scope {
     font-family: Arial, sans-serif;
-    background: #f4f6f9;
+    background: var(--color-page-background);
     margin: 0;
     padding: 30px;
 }
@@ -2625,7 +2631,7 @@ tr:hover td {
 }
 
 .cabecera {
-    background: #1976d2;
+    background: var(--color-primary);
     color: white;
     padding: 25px;
     border-radius: 12px 12px 0 0;
@@ -2669,7 +2675,7 @@ tr:hover td {
 .info-doctor {
     display: none;
     background: #eef6ff;
-    border-left: 5px solid #1976d2;
+    border-left: 5px solid var(--color-primary);
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 6px;
@@ -2703,9 +2709,9 @@ tr:hover td {
 
 .horario {
     padding: 13px;
-    border: 2px solid #1976d2;
+    border: 2px solid var(--color-primary);
     background: white;
-    color: #1976d2;
+    color: var(--color-primary);
     border-radius: 7px;
     cursor: pointer;
     text-align: center;
@@ -2714,12 +2720,12 @@ tr:hover td {
 }
 
 .horario:hover {
-    background: #1976d2;
+    background: var(--color-primary);
     color: white;
 }
 
 .horario.seleccionado {
-    background: #1976d2;
+    background: var(--color-primary);
     color: white;
 }
 
@@ -2748,7 +2754,7 @@ tr:hover td {
 }
 
 .cargando {
-    color: #1976d2;
+    color: var(--color-primary);
     font-weight: bold;
     padding: 10px 0;
 }
@@ -2771,7 +2777,7 @@ button,
 }
 
 .btn-guardar {
-    background: #1976d2;
+    background: var(--color-primary);
     color: white;
 }
 
@@ -3435,7 +3441,7 @@ a:focus-visible {
     border: 0;
     border-radius: 6px;
     color: #fff;
-    background: #1976d2;
+    background: var(--color-primary);
     font: inherit;
     cursor: pointer;
 }
@@ -3464,7 +3470,7 @@ a:focus-visible {
         min-height: 100vh;
         margin: 0;
         color: #17345c;
-        background: #f2f6fa;
+        background: var(--color-page-background);
         font-family: Arial, Helvetica, sans-serif;
     }
 
@@ -3627,7 +3633,7 @@ a:focus-visible {
     }
 
     .doctor-form-footer button:hover {
-        background: #0d64ce;
+        background: var(--color-primary-hover);
     }
 
     .doctores-alerta {

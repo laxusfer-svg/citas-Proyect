@@ -25,6 +25,7 @@ function inicializarGraficosPanel() {
 
     if (!datosElemento || !window.Chart) return;
 
+    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue("--color-primary").trim() || "#1976e8";
     const datos = JSON.parse(datosElemento.textContent);
     const estadosCanvas = document.getElementById("graficoEstados");
     const especialidadesCanvas = document.getElementById("graficoEspecialidades");
@@ -36,7 +37,7 @@ function inicializarGraficosPanel() {
                 labels: ["Atendidas", "Pendientes", "Confirmadas", "Canceladas"],
                 datasets: [{
                     data: [datos.atendidas, datos.pendientes, datos.confirmadas, datos.canceladas],
-                    backgroundColor: ["#10ad7b", "#f2a900", "#1976e8", "#ed3d48"],
+                    backgroundColor: ["#10ad7b", "#f2a900", primaryColor, "#ed3d48"],
                     borderWidth: 3,
                     borderColor: "#ffffff"
                 }]
@@ -58,7 +59,7 @@ function inicializarGraficosPanel() {
                 datasets: [{
                     label: "Citas",
                     data: datos.especialidades.map(function (item) { return item.total; }),
-                    backgroundColor: "#1976e8",
+                    backgroundColor: primaryColor,
                     borderRadius: 7
                 }]
             },
@@ -77,6 +78,7 @@ function inicializarGraficosReporte() {
 
     if (!datosElemento || !window.Chart) return;
 
+    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue("--color-primary").trim() || "#1976e8";
     const datos = JSON.parse(datosElemento.textContent);
     const estadosCanvas = document.getElementById("chartEstados");
     const especialidadesCanvas = document.getElementById("chartEspecialidades");
@@ -94,7 +96,7 @@ function inicializarGraficosReporte() {
                         datos.estados.confirmada || 0,
                         datos.estados.cancelada || 0
                     ],
-                    backgroundColor: ["#28a745", "#d68910", "#1976d2", "#dc3545"]
+                    backgroundColor: ["#28a745", "#d68910", primaryColor, "#dc3545"]
                 }]
             },
             options: {
@@ -113,7 +115,7 @@ function inicializarGraficosReporte() {
                 datasets: [{
                     label: "Total Citas",
                     data: datos.especialidades.map(function (item) { return item.total; }),
-                    backgroundColor: "#1976d2",
+                    backgroundColor: primaryColor,
                     borderRadius: 4
                 }]
             },
@@ -134,7 +136,7 @@ function inicializarGraficosReporte() {
                 datasets: [
                     { label: "Atendidas", data: datos.meses.map(function (item) { return item.atendidas; }), backgroundColor: "#28a745" },
                     { label: "Pendientes", data: datos.meses.map(function (item) { return item.pendientes; }), backgroundColor: "#d68910" },
-                    { label: "Confirmadas", data: datos.meses.map(function (item) { return item.confirmadas; }), backgroundColor: "#1976d2" },
+                    { label: "Confirmadas", data: datos.meses.map(function (item) { return item.confirmadas; }), backgroundColor: primaryColor },
                     { label: "Canceladas", data: datos.meses.map(function (item) { return item.canceladas; }), backgroundColor: "#dc3545" }
                 ]
             },
