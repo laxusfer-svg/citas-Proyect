@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "conexion.php";
+require_once "reglas_citas.php";
 
 if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"]) || (int)$_SESSION["rol"] !== 2) {
     header("Location: /");
@@ -14,12 +15,8 @@ if (empty($_SESSION["csrf_token"])) {
     $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
-$etiquetasEstado = [
-    "pendiente" => "Pendiente",
-    "confirmada" => "Confirmada",
-    "atendida" => "Atendida",
-    "cancelada" => "Cancelada"
-];
+$etiquetasEstado = ETIQUETAS_ESTADO_CITA;
+$transiciones = TRANSICIONES_ESTADO_CITA;
 $estadoSeleccionado = $_GET["estado"] ?? "";
 if (!is_string($estadoSeleccionado) || !array_key_exists($estadoSeleccionado, $etiquetasEstado)) {
     $estadoSeleccionado = "";
@@ -121,7 +118,6 @@ $totalVisible = $resultadoCitas->num_rows;
                             <td><?php echo htmlspecialchars($cita["motivo"] ?: "Sin motivo", ENT_QUOTES, "UTF-8"); ?></td>
                             <td><span class="estado estado-<?php echo htmlspecialchars($cita["estado"], ENT_QUOTES, "UTF-8"); ?>"><?php echo htmlspecialchars($etiquetasEstado[$cita["estado"]] ?? $cita["estado"], ENT_QUOTES, "UTF-8"); ?></span></td>
                             <td class="citas-admin-actions">
-                                <?php $transiciones = ["pendiente" => ["confirmada", "cancelada"], "confirmada" => ["atendida", "cancelada"], "atendida" => [], "cancelada" => []]; ?>
                                 <?php if (!empty($transiciones[$cita["estado"]])): ?>
                                     <form method="POST" action="actualizar_cita" class="form-estado-cita">
                                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, "UTF-8"); ?>">

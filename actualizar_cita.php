@@ -2,6 +2,7 @@
 
 session_start();
 include "conexion.php";
+require_once "reglas_citas.php";
 
 if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"]) || !in_array((int)$_SESSION["rol"], [1, 2], true)) {
     header("Location: /");
@@ -27,7 +28,7 @@ $destino = $rol === 2 && isset($destinos[$origen]) ? $destinos[$origen] : "panel
     $cita_id = (int)($_POST["cita_id"] ?? 0);
     $estado = $_POST["estado"] ?? "";
 
-    $estadosPermitidos = ["pendiente", "confirmada", "atendida", "cancelada"];
+    $estadosPermitidos = array_keys(ETIQUETAS_ESTADO_CITA);
 
     if ($cita_id <= 0 || !in_array($estado, $estadosPermitidos, true)) {
         http_response_code(400);
@@ -80,12 +81,7 @@ $destino = $rol === 2 && isset($destinos[$origen]) ? $destinos[$origen] : "panel
     $estadoActual = $resultadoEstadoActual->fetch_assoc()["estado"];
     $resultadoEstadoActual->free();
     $stmtEstadoActual->close();
-    $transiciones = [
-        "pendiente" => ["confirmada", "cancelada"],
-        "confirmada" => ["atendida", "cancelada"],
-        "atendida" => [],
-        "cancelada" => []
-    ];
+    $transiciones = TRANSICIONES_ESTADO_CITA;
 
     if ($estadoActual !== $estado && !in_array($estado, $transiciones[$estadoActual], true)) {
         $conexion->rollback();

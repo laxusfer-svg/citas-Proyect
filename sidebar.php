@@ -16,8 +16,7 @@ $menusPorRol = [
         ["pacientes", "pacientes", "👥", "Pacientes"],
         ["doctores", "doctores", "👨‍⚕️", "Doctores"],
         ["citas", "citas_admin", "📅", "Citas"],
-        ["reportes", "reporte_citas", "📊", "Reportes"],
-        ["administracion", "#", "⚙️", "Administración"]
+        ["reportes", "reporte_citas", "📊", "Reportes"]
     ]
 ];
 
@@ -38,12 +37,11 @@ $opcionesSidebar = $menusPorRol[(int)($_SESSION["rol"] ?? -1)] ?? [];
         <?php endforeach; ?>
     </nav>
 
-    <div class="cerrar-sesion">
-        <a href="logout" class="menu">
-            <div class="enlace-cerrar-sesion">
-                <span>🚪</span>
-                <span>Cerrar sesión</span>
-            </div>
-        </a>
-    </div>
+    <form class="cerrar-sesion" method="POST" action="logout">
+        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"] ?? "", ENT_QUOTES, "UTF-8"); ?>">
+        <button type="submit" class="logout-button" aria-label="Cerrar sesión">
+            <span>🚪</span>
+            <span>Cerrar sesión</span>
+        </button>
+    </form>
 </aside>

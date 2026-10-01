@@ -1,31 +1,22 @@
 <?php
 session_start();
 include "conexion.php";
+require_once "reglas_citas.php";
 
 if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"])) {
     header("Location: /");
     exit;
 }
 
-if (in_array((int)$_SESSION["rol"], [1, 2], true) && empty($_SESSION["csrf_token"])) {
+if (empty($_SESSION["csrf_token"])) {
     $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
 $usuario_id = (int)$_SESSION["id"];
 $rol = (int)$_SESSION["rol"];
 $usuario = $_SESSION["usuario"];
-$transicionesEstadoCita = [
-    "pendiente" => ["confirmada", "cancelada"],
-    "confirmada" => ["atendida", "cancelada"],
-    "atendida" => [],
-    "cancelada" => []
-];
-$etiquetasEstadoCita = [
-    "pendiente" => "Pendiente",
-    "confirmada" => "Confirmada",
-    "atendida" => "Atendida",
-    "cancelada" => "Cancelada"
-];
+$transicionesEstadoCita = TRANSICIONES_ESTADO_CITA;
+$etiquetasEstadoCita = ETIQUETAS_ESTADO_CITA;
 
 /* =====================================================
    VARIABLES GENERALES

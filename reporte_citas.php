@@ -316,7 +316,7 @@ while ($fila = $resultMes->fetch_assoc()) {
             </div>
 
             <button type="submit">🔎 Buscar</button>
-            <button type="submit" name="exportar" value="excel">Descargar para Excel</button>
+            <button type="submit" name="exportar" value="excel">Exportar CSV para Excel</button>
             <a href="reporte_citas" class="boton boton-limpiar">Limpiar</a>
         </form>
     </div>

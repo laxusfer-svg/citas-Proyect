@@ -935,6 +935,29 @@
         background: #1478e8;
     }
 
+    .sidebar .logout-button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        min-height: 44px;
+        padding: 11px 12px;
+        border: 0;
+        border-radius: 8px;
+        flex-direction: row;
+        color: #e6eef8;
+        background: transparent;
+        font: inherit;
+        font-size: 14px;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .sidebar .logout-button:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, .1);
+    }
+
     .menu-icon {
         display: inline-flex;
         flex: 0 0 25px;
@@ -1000,12 +1023,21 @@
             display: none;
         }
 
+        .sidebar .logout-button span:last-child {
+            display: none;
+        }
+
         .sidebar .logo,
-        .sidebar .menu a {
+        .sidebar .menu a,
+        .sidebar .logout-button {
             justify-content: center;
         }
 
         .sidebar .menu a {
+            padding: 11px 6px;
+        }
+
+        .sidebar .logout-button {
             padding: 11px 6px;
         }
 
@@ -1072,10 +1104,11 @@
             flex: 0 0 40px;
         }
 
-        .cerrar-sesion > a.menu {
+        .cerrar-sesion > .logout-button {
             justify-content: center;
             width: 40px;
             min-height: 44px;
+            flex-direction: row;
             padding: 0;
         }
 
@@ -2268,13 +2301,16 @@ tr:hover td {
 @scope (body.page-reporte) {
 :scope {
             font-family: Arial, sans-serif;
-            background: #f4f6f9;
+            background: #f3f6f8;
             margin: 0;
             padding: 30px;
+            color: #243746;
         }
 
         h1 {
-            color: #222;
+            color: #173b55;
+            font-size: 28px;
+            line-height: 1.2;
         }
 
         .contenedor {
@@ -2352,8 +2388,9 @@ tr:hover td {
         .tarjeta {
             background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            border: 1px solid #e2e9ee;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(26, 54, 75, .04);
         }
 
         .tarjeta h3 {
@@ -2368,7 +2405,8 @@ tr:hover td {
         .filtros {
             background: white;
             padding: 20px;
-            border-radius: 10px;
+            border: 1px solid #e2e9ee;
+            border-radius: 8px;
             margin-bottom: 20px;
         }
 
@@ -2391,32 +2429,52 @@ tr:hover td {
 
         input,
         select {
+            min-height: 40px;
             padding: 9px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #cbd6de;
+            border-radius: 6px;
             background: #fff;
+            color: #243746;
+        }
+
+        input:focus-visible,
+        select:focus-visible,
+        button:focus-visible,
+        .boton:focus-visible,
+        .reprogramar-link:focus-visible {
+            outline: 3px solid rgba(20, 120, 145, .3);
+            outline-offset: 2px;
         }
 
         button,
         .boton {
+            min-height: 40px;
             padding: 10px 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             text-decoration: none;
-            background: #1976d2;
+            background: #176d82;
             color: white;
+            font-weight: 600;
+            transition: background-color .16s ease, transform .16s ease;
+        }
+
+        button:hover,
+        .boton:hover {
+            background: #12586a;
         }
 
         .boton-limpiar {
-            background: #777;
+            background: #596b77;
         }
 
         .seccion {
             background: white;
             padding: 20px;
             margin-bottom: 25px;
-            border-radius: 10px;
+            border: 1px solid #e2e9ee;
+            border-radius: 8px;
             overflow-x: auto;
         }
 
@@ -2431,8 +2489,9 @@ tr:hover td {
         .tarjeta-grafico {
             background: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            border: 1px solid #e2e9ee;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(26, 54, 75, .04);
         }
 
         .tarjeta-grafico-full {
@@ -2458,7 +2517,15 @@ tr:hover td {
         }
 
         th {
-            background: #f0f2f5;
+            background: #edf2f5;
+            color: #435868;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #f6fafb;
         }
 
         .estado-atendida {
@@ -2507,6 +2574,10 @@ tr:hover td {
         }
 
         @media(max-width: 600px) {
+            :scope .contenedor {
+                padding: 22px 14px 88px;
+            }
+
             .citas-admin-header {
                 align-items: flex-start;
                 flex-direction: column;
@@ -2514,6 +2585,22 @@ tr:hover td {
 
             .citas-admin-header h1 {
                 font-size: 24px;
+            }
+
+            .filtros form {
+                align-items: stretch;
+            }
+
+            .filtros .campo,
+            .filtros input,
+            .filtros select {
+                width: 100%;
+            }
+
+            .filtros form > button,
+            .filtros form > .boton {
+                flex: 1 1 100%;
+                min-height: 44px;
             }
         }
 }

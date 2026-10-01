@@ -100,6 +100,21 @@ if ($resultDoctor->num_rows == 0) {
 
 $doctor = $resultDoctor->fetch_assoc();
 
+$stmtPaciente = $conexion->prepare("SELECT id FROM pacientes WHERE usuario_id = ? LIMIT 1");
+$stmtPaciente->bind_param("i", $_SESSION["id"]);
+$stmtPaciente->execute();
+$paciente = $stmtPaciente->get_result()->fetch_assoc();
+$stmtPaciente->close();
+
+if (!$paciente) {
+    header("Content-Type: application/json");
+    http_response_code(404);
+    echo json_encode(["error" => "No se encontró el perfil del paciente."]);
+    exit;
+}
+
+$paciente_id = (int)$paciente["id"];
+
 
 /* =====================================================
    HORARIOS DEL DOCTOR
@@ -121,18 +136,14 @@ $refrigerioFin = $doctor["refrigerio_fin"];
 $sqlCitas = "
     SELECT hora
     FROM citas
-    WHERE doctor_id = ?
-    AND fecha = ?
-    AND estado != 'cancelada'
+    WHERE fecha = ?
+    AND estado <> 'cancelada'
+    AND (doctor_id = ? OR paciente_id = ?)
 ";
 
 $stmtCitas = $conexion->prepare($sqlCitas);
 
-$stmtCitas->bind_param(
-    "is",
-    $doctor_id,
-    $fecha
-);
+$stmtCitas->bind_param("sii", $fecha, $doctor_id, $paciente_id);
 
 $stmtCitas->execute();
 
