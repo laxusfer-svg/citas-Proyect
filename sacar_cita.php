@@ -58,6 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $doctor_id = intval($_POST["doctor_id"] ?? 0);
     $fecha = $_POST["fecha"] ?? "";
     $hora = $_POST["hora"] ?? "";
+    $modalidad = $_POST["modalidad"] ?? "";
     $motivo = trim($_POST["motivo"] ?? "");
     $fechaValidada = DateTime::createFromFormat("!Y-m-d", $fecha);
     $erroresFecha = DateTime::getLastErrors();
@@ -72,9 +73,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ($erroresHora === false || ($erroresHora["warning_count"] === 0 && $erroresHora["error_count"] === 0)) &&
         $horaValidada->format("H:i:s") === $hora;
 
-    if ($doctor_id <= 0 || !$fechaValida || !$horaValida) {
+    if ($doctor_id <= 0 || !$fechaValida || !$horaValida || !in_array($modalidad, ["presencial", "virtual"], true)) {
 
-        $mensaje = "La fecha, la hora o el doctor seleccionados no son válidos.";
+        $mensaje = "Selecciona un doctor, modalidad, fecha y horario válidos.";
         $tipo_mensaje = "error";
 
     } else {
@@ -269,21 +270,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 doctor_id,
                                 fecha,
                                 hora,
+                                modalidad,
                                 motivo,
                                 estado
                             )
                             VALUES
-                            (?, ?, ?, ?, ?, 'pendiente')
+                            (?, ?, ?, ?, ?, ?, 'pendiente')
                         ";
 
                         $stmtInsert = $conexion->prepare($sqlInsert);
 
                         $stmtInsert->bind_param(
-                            "iisss",
+                            "iissss",
                             $paciente_id,
                             $doctor_id,
                             $fecha,
                             $hora,
+                            $modalidad,
                             $motivo
                         );
 
@@ -412,6 +415,21 @@ if ($resultDoctores->num_rows > 0) {
 ?>
 </select>
 </div>
+
+<fieldset class="modalidad-selector" aria-describedby="ayudaModalidad">
+    <legend>Modalidad de atención</legend>
+    <p id="ayudaModalidad">Selecciona cómo recibirás la consulta.</p>
+    <div class="modalidad-opciones">
+        <label class="modalidad-opcion">
+            <input type="radio" name="modalidad" value="presencial" required checked>
+            <span><strong>Presencial</strong><small>En el consultorio</small></span>
+        </label>
+        <label class="modalidad-opcion">
+            <input type="radio" name="modalidad" value="virtual" required>
+            <span><strong>Virtual</strong><small>Por videollamada</small></span>
+        </label>
+    </div>
+</fieldset>
 
 <!-- INFORMACIÓN DEL DOCTOR -->
 <div class="info-doctor" id="infoDoctor">

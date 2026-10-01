@@ -194,6 +194,7 @@ $sqlDetalle = "
         c.id,
         c.fecha,
         c.hora,
+        c.modalidad,
         c.estado,
         c.motivo,
 
@@ -406,6 +407,7 @@ $resultDetalle = $stmt->get_result();
                 <tr>
                     <th>Fecha</th>
                     <th>Hora</th>
+                    <th>Modalidad</th>
                     <th>DNI</th>
                     <th>Paciente</th>
                     <th>Doctor</th>
@@ -420,6 +422,7 @@ $resultDetalle = $stmt->get_result();
                 <tr>
                     <td><?php echo date("d/m/Y", strtotime($fila["fecha"])); ?></td>
                     <td><?php echo substr($fila["hora"], 0, 5); ?></td>
+                    <td><span class="badge-modalidad modalidad-<?php echo htmlspecialchars($fila["modalidad"], ENT_QUOTES, "UTF-8"); ?>"><?php echo $fila["modalidad"] === "virtual" ? "Virtual" : "Presencial"; ?></span></td>
                     <td><?php echo htmlspecialchars($fila["dni"]); ?></td>
                     <td><?php echo htmlspecialchars($fila["paciente_nombres"] . " " . $fila["paciente_apellidos"]); ?></td>
                     <td><?php echo htmlspecialchars("Dr. " . $fila["doctor_nombres"] . " " . $fila["doctor_apellidos"]); ?></td>

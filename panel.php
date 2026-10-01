@@ -54,23 +54,6 @@ $citasProximosSieteDias = 0;
 
 if ($rol == 2) {
 
-    // Total
-    $sql = "SELECT COUNT(*) AS total FROM citas";
-    $resultado = $conexion->query($sql);
-    $totalCitas = (int)$resultado->fetch_assoc()["total"];
-
-    $sqlResumen = "
-        SELECT
-            (SELECT COUNT(*) FROM pacientes) AS pacientes,
-            (SELECT COUNT(*) FROM doctores) AS doctores,
-            (SELECT COUNT(*) FROM citas
-             WHERE fecha = CURDATE() AND estado != 'cancelada') AS citas_hoy,
-            (SELECT COUNT(*) FROM citas
-             WHERE fecha > CURDATE()
-               AND fecha <= DATE_ADD(CURDATE(), INTERVAL 7 DAY)
-               AND estado IN ('pendiente', 'confirmada')) AS citas_proximos_siete_dias
-    ";
-
     $resumenAdmin = $conexion->query($sqlResumen)->fetch_assoc();
     $pacientesRegistrados = (int)$resumenAdmin["pacientes"];
     $doctoresRegistrados = (int)$resumenAdmin["doctores"];
@@ -129,6 +112,7 @@ if ($rol == 2) {
             c.id,
             c.fecha,
             c.hora,
+            c.modalidad,
             c.estado,
             c.motivo,
 
@@ -251,6 +235,7 @@ if ($rol == 1) {
             c.id,
             c.fecha,
             c.hora,
+            c.modalidad,
             c.estado,
             c.motivo,
 
@@ -369,6 +354,7 @@ if ($rol == 0) {
             c.id,
             c.fecha,
             c.hora,
+            c.modalidad,
             c.estado,
             c.motivo,
 
@@ -803,6 +789,7 @@ if ($rol == 0) {
 
                         <th>Fecha</th>
                         <th>Hora</th>
+                        <th>Modalidad</th>
                         <th>Paciente</th>
                         <th>DNI</th>
                         <th>Doctor</th>
@@ -841,6 +828,12 @@ if ($rol == 0) {
                                 5
                             );
                             ?>
+                        </td>
+
+                        <td>
+                            <span class="badge-modalidad modalidad-<?php echo htmlspecialchars($fila["modalidad"], ENT_QUOTES, "UTF-8"); ?>">
+                                <?php echo $fila["modalidad"] === "virtual" ? "Virtual" : "Presencial"; ?>
+                            </span>
                         </td>
 
                         <td>
@@ -945,7 +938,7 @@ if ($rol == 0) {
                 <?php endforeach; ?>
 
                 <tr class="fila-sin-resultados">
-                    <td colspan="8" class="mensaje-tabla-vacio">
+                    <td colspan="9" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -954,7 +947,7 @@ if ($rol == 0) {
 
                     <tr>
 
-                        <td colspan="8" class="mensaje-tabla-vacio">
+                        <td colspan="9" class="mensaje-tabla-vacio">
 
                             No hay citas registradas.
 
@@ -1120,6 +1113,7 @@ if ($rol == 0) {
 
                         <th>Fecha</th>
                         <th>Hora</th>
+                        <th>Modalidad</th>
                         <th>Paciente</th>
                         <th>DNI</th>
                         <th>Motivo</th>
@@ -1154,6 +1148,12 @@ if ($rol == 0) {
                                 5
                             );
                             ?>
+                        </td>
+
+                        <td>
+                            <span class="badge-modalidad modalidad-<?php echo htmlspecialchars($fila["modalidad"], ENT_QUOTES, "UTF-8"); ?>">
+                                <?php echo $fila["modalidad"] === "virtual" ? "Virtual" : "Presencial"; ?>
+                            </span>
                         </td>
 
                         <td>
@@ -1239,7 +1239,7 @@ if ($rol == 0) {
                 <?php endforeach; ?>
 
                 <tr class="fila-sin-resultados">
-                    <td colspan="7" class="mensaje-tabla-vacio">
+                    <td colspan="8" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -1248,7 +1248,7 @@ if ($rol == 0) {
 
                     <tr>
 
-                        <td colspan="7" class="mensaje-tabla-vacio">
+                        <td colspan="8" class="mensaje-tabla-vacio">
 
                             No tienes citas registradas.
 
@@ -1443,6 +1443,7 @@ if ($rol == 0) {
 
                         <th>Fecha</th>
                         <th>Hora</th>
+                        <th>Modalidad</th>
                         <th>Doctor</th>
                         <th>Especialidad</th>
                         <th>Motivo</th>
@@ -1475,16 +1476,15 @@ if ($rol == 0) {
                         </td>
 
                         <td>
-
                             <?php
-
-                            echo substr(
-                                $fila["hora"],
-                                0,
-                                5
-                            );
-
+                            echo substr($fila["hora"], 0, 5);
                             ?>
+                        </td>
+
+                        <td>
+                            <span class="badge-modalidad modalidad-<?php echo htmlspecialchars($fila["modalidad"], ENT_QUOTES, "UTF-8"); ?>">
+                                <?php echo $fila["modalidad"] === "virtual" ? "Virtual" : "Presencial"; ?>
+                            </span>
 
                         </td>
 
@@ -1560,7 +1560,7 @@ if ($rol == 0) {
                 <?php endforeach; ?>
 
                 <tr class="fila-sin-resultados">
-                    <td colspan="6" class="mensaje-tabla-vacio">
+                    <td colspan="7" class="mensaje-tabla-vacio">
                         No hay citas con el estado seleccionado.
                     </td>
                 </tr>
@@ -1569,7 +1569,7 @@ if ($rol == 0) {
 
                     <tr>
 
-                        <td colspan="6" class="mensaje-tabla-vacio">
+                        <td colspan="7" class="mensaje-tabla-vacio">
 
                             No tienes citas registradas.
 

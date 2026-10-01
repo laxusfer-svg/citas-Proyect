@@ -168,6 +168,8 @@ CREATE TABLE citas (
 
     hora TIME NOT NULL,
 
+    modalidad ENUM('presencial', 'virtual') NOT NULL DEFAULT 'presencial',
+
     motivo VARCHAR(255) NULL,
 
     estado ENUM(
