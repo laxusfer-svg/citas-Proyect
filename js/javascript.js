@@ -199,7 +199,7 @@ function inicializarReserva() {
     const doctorSelect = document.getElementById("doctor_id");
     const calendario = document.getElementById("calendarioVisor");
 
-    if (!especialidadSelect || !doctorSelect || !calendario || !window.flatpickr) return;
+    if (!especialidadSelect || !doctorSelect) return;
 
     const opcionesDoctor = Array.from(doctorSelect.querySelectorAll("option[data-especialidad]"));
 
@@ -220,18 +220,20 @@ function inicializarReserva() {
         }
     });
 
-    window.flatpickr(calendario, {
-        inline: true,
-        locale: "es",
-        minDate: "today",
-        dateFormat: "Y-m-d",
-        onChange: function (selectedDates, dateStr) {
-            fechaInput.value = dateStr;
-            horaInput.value = "";
-            btnGuardar.disabled = true;
-            cargarHorarios();
-        }
-    });
+    if (calendario && window.flatpickr) {
+        window.flatpickr(calendario, {
+            inline: true,
+            locale: "es",
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            onChange: function (selectedDates, dateStr) {
+                fechaInput.value = dateStr;
+                horaInput.value = "";
+                btnGuardar.disabled = true;
+                cargarHorarios();
+            }
+        });
+    }
 
     doctorSelect.addEventListener("change", function () {
         const opcion = this.options[this.selectedIndex];

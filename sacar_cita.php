@@ -508,7 +508,7 @@ Confirmar cita
 <!-- Scripts de Flatpickr (Calendario) -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-<script src="js/javascript.js" defer></script>
+<script src="js/javascript.js?v=20260930-1" defer></script>
 
 </body>
 
