@@ -10,6 +10,8 @@ if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"]) || (int)$_SESSION["rol"]
 if (empty($_SESSION["csrf_token"])) {
     $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
+$rol = 2;
+$paginaActiva = "pacientes";
 
 $mensaje = "";
 $tipoMensaje = "error";
@@ -125,7 +127,8 @@ $estaEditando = $pacienteId > 0;
     <title>Administrar pacientes</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="page-pacientes">
+<body class="page-pacientes has-sidebar">
+<?php include "sidebar.php"; ?>
 <main class="pacientes-page">
     <header class="pacientes-header">
         <div>

@@ -11,6 +11,9 @@ if (empty($_SESSION["csrf_token"])) {
     $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
+$rol = 2;
+$paginaActiva = "reportes";
+
 $fecha_inicio = $_GET["fecha_inicio"] ?? "";
 $fecha_fin = $_GET["fecha_fin"] ?? "";
 $dni = trim($_GET["dni"] ?? "");
@@ -203,7 +206,8 @@ while ($fila = $resultMes->fetch_assoc()) {
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body class="page-reporte">
+<body class="page-reporte has-sidebar">
+<?php include "sidebar.php"; ?>
 
 <div class="contenedor">
 

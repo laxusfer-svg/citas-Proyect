@@ -802,6 +802,8 @@
 
 
 
+
+
 @media(max-width: 500px) {
 
     :scope {
@@ -850,6 +852,256 @@
     }
 
 }
+}
+
+@scope (body.has-sidebar) {
+    :scope,
+    * {
+        box-sizing: border-box;
+    }
+
+    :scope {
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        width: 220px;
+        height: 100vh;
+        padding: 20px 12px;
+        color: #fff;
+        background: linear-gradient(180deg, #102f55, #0d2949);
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        margin-bottom: 25px;
+    }
+
+    .logo-icon {
+        display: flex;
+        flex: 0 0 42px;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        color: #fff;
+        background: #1976e8;
+        font-size: 23px;
+    }
+
+    .logo-text {
+        color: #fff;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .sidebar .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .sidebar .menu a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 44px;
+        padding: 11px 12px;
+        border-radius: 8px;
+        color: #e6eef8;
+        font-size: 14px;
+        text-decoration: none;
+        transition: background .18s ease;
+    }
+
+    .sidebar .menu a:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, .1);
+    }
+
+    .sidebar .menu a.activo {
+        color: #fff;
+        background: #1478e8;
+    }
+
+    .menu-icon {
+        display: inline-flex;
+        flex: 0 0 25px;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        font-size: 18px;
+        text-align: center;
+    }
+
+    .cerrar-sesion {
+        position: absolute;
+        right: 12px;
+        bottom: 20px;
+        left: 12px;
+    }
+
+    .enlace-cerrar-sesion {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 12px;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    :scope .contenido,
+    :scope .contenedor,
+    :scope .doctores-page,
+    :scope .pacientes-page {
+        box-sizing: border-box;
+        width: calc(100% - 220px);
+        max-width: none;
+        margin: 0 0 0 220px;
+    }
+
+    :scope.page-reporte {
+        padding: 0;
+    }
+
+    :scope .contenido {
+        min-height: 100vh;
+        padding: 30px;
+    }
+
+    :scope .contenedor {
+        padding: 30px;
+    }
+
+    :scope .doctores-page,
+    :scope .pacientes-page {
+        padding: 34px 24px 48px;
+    }
+
+    @media (max-width: 800px) {
+        .sidebar {
+            width: 70px;
+            padding: 15px 8px;
+        }
+
+        .logo-text,
+        .sidebar .menu span {
+            display: none;
+        }
+
+        .sidebar .logo,
+        .sidebar .menu a {
+            justify-content: center;
+        }
+
+        .sidebar .menu a {
+            padding: 11px 6px;
+        }
+
+        :scope .contenido,
+        :scope .contenedor,
+        :scope .doctores-page,
+        :scope .pacientes-page {
+            width: calc(100% - 70px);
+            margin-left: 70px;
+        }
+
+        :scope .contenido,
+        :scope .contenedor {
+            padding: 22px 20px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .sidebar {
+            top: auto;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: auto;
+            min-height: 64px;
+            gap: 4px;
+            padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+        }
+
+        .sidebar .logo {
+            display: none;
+        }
+
+        .sidebar > .menu {
+            flex: 1 1 auto;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: space-around;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .sidebar > .menu > a {
+            flex: 1 1 0;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            min-width: 0;
+            min-height: 44px;
+            padding: 7px 2px;
+        }
+
+        .sidebar > .menu > a .menu-icon {
+            flex: 0 0 auto;
+            width: auto;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .cerrar-sesion {
+            position: static;
+            flex: 0 0 40px;
+        }
+
+        .cerrar-sesion > a.menu {
+            justify-content: center;
+            width: 40px;
+            min-height: 44px;
+            padding: 0;
+        }
+
+        .enlace-cerrar-sesion {
+            justify-content: center;
+            padding: 8px 0;
+        }
+
+        .enlace-cerrar-sesion span:last-child {
+            display: none;
+        }
+
+        :scope .contenido,
+        :scope .contenedor,
+        :scope .doctores-page,
+        :scope .pacientes-page {
+            width: 100%;
+            margin: 0;
+            padding: 18px 14px calc(96px + env(safe-area-inset-bottom));
+        }
+
+        :scope .doctores-page,
+        :scope .pacientes-page {
+            padding-top: 22px;
+        }
+    }
 }
 
 @scope (body.page-pacientes) {

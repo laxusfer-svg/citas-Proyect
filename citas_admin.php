@@ -7,6 +7,9 @@ if (!isset($_SESSION["id"]) || !isset($_SESSION["rol"]) || (int)$_SESSION["rol"]
     exit;
 }
 
+$rol = 2;
+$paginaActiva = "citas";
+
 if (empty($_SESSION["csrf_token"])) {
     $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
@@ -52,7 +55,8 @@ $totalVisible = $resultadoCitas->num_rows;
     <title>Administrar citas</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="page-reporte">
+<body class="page-reporte has-sidebar">
+<?php include "sidebar.php"; ?>
 <div class="contenedor">
     <div class="citas-admin-header">
         <div>

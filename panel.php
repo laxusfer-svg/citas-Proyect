@@ -430,106 +430,12 @@ if ($rol == 0) {
 </head>
 
 
-<body class="page-panel">
+<body class="page-panel has-sidebar">
 
-
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
-
-<aside class="sidebar">
-
-    <div class="logo">
-
-        <div class="logo-icon">
-            ✚
-        </div>
-
-        <div class="logo-text">
-            Sistema de<br>
-            Citas Médicas
-        </div>
-
-    </div>
-
-
-    <nav class="menu">
-
-        <a href="panel" class="activo">
-            <div class="menu-icon">⌂</div>
-            <span>Inicio</span>
-        </a>
-
-
-        <?php if ($rol == 2): ?>
-
-            <a href="pacientes">
-                <div class="menu-icon">👥</div>
-                <span>Pacientes</span>
-            </a>
-
-            <a href="doctores">
-                <div class="menu-icon">👨‍⚕️</div>
-                <span>Doctores</span>
-            </a>
-
-            <a href="citas_admin">
-                <div class="menu-icon">📅</div>
-                <span>Citas</span>
-            </a>
-
-            <a href="reporte_citas">
-                <div class="menu-icon">📊</div>
-                <span>Reportes</span>
-            </a>
-
-            <a href="#">
-                <div class="menu-icon">⚙️</div>
-                <span>Administración</span>
-            </a>
-
-        <?php elseif ($rol == 1): ?>
-
-            <a href="panel">
-                <div class="menu-icon">📅</div>
-                <span>Mis citas</span>
-            </a>
-
-        <?php elseif ($rol == 0): ?>
-
-            <a href="sacar_cita">
-                <div class="menu-icon">📅</div>
-                <span>Sacar cita</span>
-            </a>
-
-            <a href="panel">
-                <div class="menu-icon">📋</div>
-                <span>Mis citas</span>
-            </a>
-
-        <?php endif; ?>
-
-    </nav>
-
-
-    <div class="cerrar-sesion">
-
-        <a href="logout"
-           class="menu">
-
-            <div class="enlace-cerrar-sesion">
-
-                <span>🚪</span>
-
-                <span>Cerrar sesión</span>
-
-            </div>
-
-        </a>
-
-    </div>
-
-</aside>
+<?php
+$paginaActiva = "panel";
+include "sidebar.php";
+?>
 
 
 <!-- =====================================================
