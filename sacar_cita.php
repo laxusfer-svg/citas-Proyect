@@ -18,6 +18,8 @@ if (empty($_SESSION["csrf_token"])) {
 $usuario_id = $_SESSION["id"];
 $mensaje = "";
 $tipo_mensaje = "";
+$especialidadSeleccionada = "";
+$doctorSeleccionado = 0;
 
 /* =====================================================
    OBTENER PACIENTE
@@ -56,6 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $doctor_id = intval($_POST["doctor_id"] ?? 0);
+    $especialidadSeleccionada = trim($_POST["especialidad_id"] ?? "");
+    $doctorSeleccionado = $doctor_id;
     $fecha = $_POST["fecha"] ?? "";
     $hora = $_POST["hora"] ?? "";
     $modalidad = $_POST["modalidad"] ?? "";
@@ -73,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ($erroresHora === false || ($erroresHora["warning_count"] === 0 && $erroresHora["error_count"] === 0)) &&
         $horaValidada->format("H:i:s") === $hora;
 
-    if ($doctor_id <= 0 || !$fechaValida || !$horaValida || !in_array($modalidad, ["presencial", "virtual"], true)) {
+    if ($doctor_id <= 0 || $especialidadSeleccionada === "" || !$fechaValida || !$horaValida || !in_array($modalidad, ["presencial", "virtual"], true)) {
 
         $mensaje = "Selecciona un doctor, modalidad, fecha y horario válidos.";
         $tipo_mensaje = "error";
@@ -94,12 +98,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 refrigerio_inicio,
                 refrigerio_fin
             FROM doctores
-            WHERE id = ?
+                        WHERE id = ?
+                            AND especialidad = ?
             FOR UPDATE
         ";
 
         $stmtDoctor = $conexion->prepare($sqlDoctor);
-        $stmtDoctor->bind_param("i", $doctor_id);
+                $stmtDoctor->bind_param("is", $doctor_id, $especialidadSeleccionada);
         $stmtDoctor->execute();
 
         $resultDoctor = $stmtDoctor->get_result();
@@ -110,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmtDoctor->close();
             $conexion->rollback();
 
-            $mensaje = "El doctor seleccionado no existe.";
+            $mensaje = "El doctor no corresponde a la especialidad seleccionada.";
             $tipo_mensaje = "error";
 
         } else {
@@ -334,6 +339,17 @@ $sqlDoctores = "
 ";
 
 $resultDoctores = $conexion->query($sqlDoctores);
+$doctores = [];
+$especialidadesRegistradas = [];
+
+while ($doctor = $resultDoctores->fetch_assoc()) {
+    $doctores[] = $doctor;
+    $especialidadesRegistradas[$doctor["especialidad"]] = true;
+}
+
+$especialidades = array_keys($especialidadesRegistradas);
+natcasesort($especialidades);
+$especialidades = array_values($especialidades);
 
 ?>
 <!DOCTYPE html>
@@ -361,7 +377,7 @@ $resultDoctores = $conexion->query($sqlDoctores);
     <div>
         <p class="modal-eyebrow">AGENDA MÉDICA / NUEVA CITA</p>
         <h1 id="tituloReserva">Agenda tu consulta</h1>
-        <p class="modal-subtitulo">Elige al profesional, la fecha y un horario disponible.</p>
+        <p class="modal-subtitulo">Elige primero la especialidad y el doctor; después, la fecha y el horario.</p>
     </div>
     <a href="panel" class="modal-cerrar" aria-label="Cerrar y volver al panel" title="Volver al panel">&times;</a>
     <div class="modal-paciente">
@@ -387,15 +403,25 @@ $resultDoctores = $conexion->query($sqlDoctores);
 
 <!-- DOCTOR -->
 <div class="campo">
-<label for="doctor_id">Profesional médico</label>
-<select name="doctor_id" id="doctor_id" required>
-<option value="">Selecciona un doctor</option>
+<label for="especialidad_id">1. Especialidad médica</label>
+<select name="especialidad_id" id="especialidad_id" required>
+<option value="">Selecciona una especialidad</option>
+<?php foreach ($especialidades as $especialidad): ?>
+<option value="<?php echo htmlspecialchars($especialidad, ENT_QUOTES, "UTF-8"); ?>" <?php echo $especialidadSeleccionada === $especialidad ? "selected" : ""; ?>><?php echo htmlspecialchars($especialidad, ENT_QUOTES, "UTF-8"); ?></option>
+<?php endforeach; ?>
+</select>
+</div>
+
+<div class="campo">
+<label for="doctor_id">2. Profesional médico</label>
+<select name="doctor_id" id="doctor_id" required disabled>
+<option value=""><?php echo $doctores ? "Selecciona primero una especialidad" : "No hay doctores registrados"; ?></option>
 <?php
-if ($resultDoctores->num_rows > 0) {
-    while ($doctor = $resultDoctores->fetch_assoc()) {
-        ?>
+foreach ($doctores as $doctor) {
+    ?>
         <option
             value="<?php echo $doctor["id"]; ?>"
+            <?php echo $doctorSeleccionado === (int)$doctor["id"] ? "selected" : ""; ?>
             data-especialidad="<?php echo htmlspecialchars($doctor["especialidad"]); ?>"
             data-inicio="<?php echo $doctor["hora_inicio"]; ?>"
             data-fin="<?php echo $doctor["hora_fin"]; ?>"
@@ -405,11 +431,6 @@ if ($resultDoctores->num_rows > 0) {
             Dr(a). <?php echo htmlspecialchars($doctor["nombres"] . " " . $doctor["apellidos"]); ?>
             - <?php echo htmlspecialchars($doctor["especialidad"]); ?>
         </option>
-        <?php
-    }
-} else {
-    ?>
-    <option value="">No hay doctores registrados</option>
     <?php
 }
 ?>

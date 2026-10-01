@@ -195,10 +195,13 @@ function inicializarFiltroCitas() {
 }
 
 function inicializarReserva() {
+    const especialidadSelect = document.getElementById("especialidad_id");
     const doctorSelect = document.getElementById("doctor_id");
     const calendario = document.getElementById("calendarioVisor");
 
-    if (!doctorSelect || !calendario || !window.flatpickr) return;
+    if (!especialidadSelect || !doctorSelect || !calendario || !window.flatpickr) return;
+
+    const opcionesDoctor = Array.from(doctorSelect.querySelectorAll("option[data-especialidad]"));
 
     const fechaInput = document.getElementById("fecha");
     const listaHorarios = document.getElementById("listaHorarios");
@@ -254,6 +257,32 @@ function inicializarReserva() {
 
         cargarHorarios();
     });
+
+    function filtrarDoctores(limpiarSeleccion) {
+        const especialidad = especialidadSelect.value;
+        doctorSelect.disabled = especialidad === "";
+
+        opcionesDoctor.forEach(function (opcion) {
+            const coincide = especialidad !== "" && opcion.dataset.especialidad === especialidad;
+            opcion.hidden = !coincide;
+
+            if (!coincide && opcion.selected) {
+                doctorSelect.value = "";
+            }
+        });
+
+        if (limpiarSeleccion) {
+            doctorSelect.value = "";
+        }
+
+        doctorSelect.dispatchEvent(new Event("change"));
+    }
+
+    especialidadSelect.addEventListener("change", function () {
+        filtrarDoctores(true);
+    });
+
+    filtrarDoctores(false);
 
     function cargarHorarios() {
         const doctorId = doctorSelect.value;
