@@ -2030,6 +2030,66 @@ tr:hover td {
             margin: auto;
         }
 
+        .citas-admin-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 18px;
+            margin: 14px 0 24px;
+        }
+
+        .citas-admin-header h1 {
+            margin: 0;
+            color: #173b68;
+            font-size: 28px;
+        }
+
+        .citas-admin-header p:last-child {
+            margin: 8px 0 0;
+            color: #68809d;
+            font-size: 14px;
+        }
+
+        .citas-admin-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .citas-admin-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .citas-admin-table {
+            min-width: 1180px;
+        }
+
+        .citas-admin-actions {
+            min-width: 245px;
+        }
+
+        .badge-modalidad {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 0 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .modalidad-presencial {
+            color: #27645d;
+            background: #e2f3ef;
+        }
+
+        .modalidad-virtual {
+            color: #385c8a;
+            background: #e7effa;
+        }
+
         .tarjetas {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -2191,6 +2251,17 @@ tr:hover td {
             }
             .graficos-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+            .citas-admin-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .citas-admin-header h1 {
+                font-size: 24px;
             }
         }
 }

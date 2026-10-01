@@ -12,7 +12,10 @@ if (empty($_SESSION["csrf_token"])) {
 }
 
 $citaId = (int)($_GET["id"] ?? $_POST["cita_id"] ?? 0);
-$origen = ($_GET["origen"] ?? $_POST["origen"] ?? "") === "reporte" ? "reporte" : "panel";
+$origenSolicitado = $_GET["origen"] ?? $_POST["origen"] ?? "";
+$destinosRetorno = ["reporte" => "reporte_citas", "citas" => "citas_admin"];
+$origen = isset($destinosRetorno[$origenSolicitado]) ? $origenSolicitado : "panel";
+$destinoRetorno = $destinosRetorno[$origen] ?? "panel";
 $mensaje = "";
 $tipoMensaje = "error";
 $reprogramada = false;
@@ -249,7 +252,7 @@ if ($fechaValida && !$reprogramada && !$horariosDisponibles) {
                 <h1 id="tituloReprogramar">Reprogramar cita</h1>
                 <p class="modal-subtitulo">Selecciona una nueva fecha y un horario libre para el mismo doctor.</p>
             </div>
-            <a class="modal-cerrar" href="<?php echo $origen === "reporte" ? "reporte_citas" : "panel"; ?>" aria-label="Cerrar y volver">&times;</a>
+            <a class="modal-cerrar" href="<?php echo htmlspecialchars($destinoRetorno, ENT_QUOTES, "UTF-8"); ?>" aria-label="Cerrar y volver">&times;</a>
             <div class="modal-paciente">
                 <span>Paciente</span>
                 <strong><?php echo htmlspecialchars($cita["paciente_nombres"] . " " . $cita["paciente_apellidos"], ENT_QUOTES, "UTF-8"); ?></strong>
@@ -301,12 +304,12 @@ if ($fechaValida && !$reprogramada && !$horariosDisponibles) {
                     </div>
                     <div class="botones reserva-acciones">
                         <button type="submit" class="btn-guardar" <?php echo !$horariosDisponibles ? "disabled" : ""; ?>>Confirmar reprogramación</button>
-                        <a class="boton btn-volver" href="<?php echo $origen === "reporte" ? "reporte_citas" : "panel"; ?>">Cancelar</a>
+                        <a class="boton btn-volver" href="<?php echo htmlspecialchars($destinoRetorno, ENT_QUOTES, "UTF-8"); ?>">Cancelar</a>
                     </div>
                 </form>
             <?php else: ?>
                 <div class="botones reserva-acciones">
-                    <a class="boton btn-volver" href="<?php echo $origen === "reporte" ? "reporte_citas" : "panel"; ?>">Volver a las citas</a>
+                    <a class="boton btn-volver" href="<?php echo htmlspecialchars($destinoRetorno, ENT_QUOTES, "UTF-8"); ?>">Volver a las citas</a>
                 </div>
             <?php endif; ?>
         </div>

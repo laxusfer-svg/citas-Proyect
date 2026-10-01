@@ -20,7 +20,9 @@ if (empty($_SESSION["csrf_token"]) || !hash_equals($_SESSION["csrf_token"], $_PO
 
 $rol = (int)$_SESSION["rol"];
 $usuario_id = (int)$_SESSION["id"];
-$destino = $rol === 2 && ($_POST["origen"] ?? "") === "reporte" ? "reporte_citas" : "panel";
+$origen = $_POST["origen"] ?? "";
+$destinos = ["reporte" => "reporte_citas", "citas" => "citas_admin"];
+$destino = $rol === 2 && isset($destinos[$origen]) ? $destinos[$origen] : "panel";
 
     $cita_id = (int)($_POST["cita_id"] ?? 0);
     $estado = $_POST["estado"] ?? "";

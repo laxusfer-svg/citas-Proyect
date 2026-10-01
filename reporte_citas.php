@@ -11,19 +11,6 @@ if (empty($_SESSION["csrf_token"])) {
     $_SESSION["csrf_token"] = bin2hex(random_bytes(32));
 }
 
-$transicionesEstadoCita = [
-    "pendiente" => ["confirmada", "cancelada"],
-    "confirmada" => ["atendida", "cancelada"],
-    "atendida" => [],
-    "cancelada" => []
-];
-$etiquetasEstadoCita = [
-    "pendiente" => "Pendiente",
-    "confirmada" => "Confirmada",
-    "atendida" => "Atendida",
-    "cancelada" => "Cancelada"
-];
-
 $fecha_inicio = $_GET["fecha_inicio"] ?? "";
 $fecha_fin = $_GET["fecha_fin"] ?? "";
 $dni = trim($_GET["dni"] ?? "");
@@ -201,49 +188,6 @@ while ($fila = $resultMes->fetch_assoc()) {
     $datosMes[] = $fila;
 }
 
-
-/* ==========================================
-   DETALLE DE CITAS
-========================================== */
-
-$sqlDetalle = "
-    SELECT
-        c.id,
-        c.fecha,
-        c.hora,
-        c.modalidad,
-        c.estado,
-        c.motivo,
-
-        p.dni,
-        p.nombres AS paciente_nombres,
-        p.apellidos AS paciente_apellidos,
-
-        d.nombres AS doctor_nombres,
-        d.apellidos AS doctor_apellidos,
-        d.especialidad
-
-    FROM citas c
-
-    INNER JOIN pacientes p
-        ON c.paciente_id = p.id
-
-    INNER JOIN doctores d
-        ON c.doctor_id = d.id
-
-    $whereSQL
-
-    ORDER BY c.fecha DESC, c.hora DESC
-";
-
-$stmt = $conexion->prepare($sqlDetalle);
-
-if ($types != "") {
-    $stmt->bind_param($types, ...$params);
-}
-
-$stmt->execute();
-$resultDetalle = $stmt->get_result();
 
 ?>
 <!DOCTYPE html>
@@ -424,78 +368,8 @@ $resultDetalle = $stmt->get_result();
         </table>
     </div>
 
-    <!-- =====================================
-         DETALLE DE CITAS (TABLA)
-    ===================================== -->
-    <div class="seccion">
-        <h2>📋 Detalle de citas</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Hora</th>
-                    <th>Modalidad</th>
-                    <th>DNI</th>
-                    <th>Paciente</th>
-                    <th>Doctor</th>
-                    <th>Especialidad</th>
-                    <th>Motivo</th>
-                    <th>Estado</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($fila = $resultDetalle->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo date("d/m/Y", strtotime($fila["fecha"])); ?></td>
-                    <td><?php echo substr($fila["hora"], 0, 5); ?></td>
-                    <td><span class="badge-modalidad modalidad-<?php echo htmlspecialchars($fila["modalidad"], ENT_QUOTES, "UTF-8"); ?>"><?php echo $fila["modalidad"] === "virtual" ? "Virtual" : "Presencial"; ?></span></td>
-                    <td><?php echo htmlspecialchars($fila["dni"]); ?></td>
-                    <td><?php echo htmlspecialchars($fila["paciente_nombres"] . " " . $fila["paciente_apellidos"]); ?></td>
-                    <td><?php echo htmlspecialchars("Dr. " . $fila["doctor_nombres"] . " " . $fila["doctor_apellidos"]); ?></td>
-                    <td><?php echo htmlspecialchars($fila["especialidad"]); ?></td>
-                    <td><?php echo htmlspecialchars($fila["motivo"]); ?></td>
-                    <td class="estado-<?php echo $fila["estado"]; ?>">
-                        <?php
-                        $estadosTexto = [
-                            "pendiente" => "Pendiente",
-                            "confirmada" => "Confirmada",
-                            "atendida" => "Atendida",
-                            "cancelada" => "Cancelada"
-                        ];
-                        echo $estadosTexto[$fila["estado"]] ?? $fila["estado"];
-                        ?>
-                    </td>
-                    <td>
-                        <?php $opcionesEstado = $transicionesEstadoCita[$fila["estado"]] ?? []; ?>
-                        <?php if ($opcionesEstado): ?>
-                            <form method="POST" action="actualizar_cita" class="form-estado-cita">
-                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION["csrf_token"], ENT_QUOTES, "UTF-8"); ?>">
-                                <input type="hidden" name="cita_id" value="<?php echo (int)$fila["id"]; ?>">
-                                <input type="hidden" name="origen" value="reporte">
-                                <label class="sr-only" for="estado-reporte-<?php echo (int)$fila["id"]; ?>">Nuevo estado de cita</label>
-                                <select id="estado-reporte-<?php echo (int)$fila["id"]; ?>" name="estado" required>
-                                    <option value="" selected disabled>Cambiar estado</option>
-                                    <?php foreach ($opcionesEstado as $opcionEstado): ?>
-                                        <option value="<?php echo htmlspecialchars($opcionEstado); ?>"><?php echo htmlspecialchars($etiquetasEstadoCita[$opcionEstado]); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                                <button type="submit">Guardar</button>
-                            </form>
-                        <?php else: ?>
-                            <span class="accion-finalizada">Sin cambios</span>
-                        <?php endif; ?>
-                        <?php if (in_array($fila["estado"], ["pendiente", "confirmada"], true)): ?>
-                            <a class="reprogramar-link" href="reprogramar_cita?id=<?php echo (int)$fila["id"]; ?>&origen=reporte">Reprogramar</a>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
-
-    <a href="panel" class="boton">⬅ Volver al panel</a>
+    <a href="citas_admin" class="boton">📅 Administrar citas</a>
+    <a href="panel" class="boton">Volver al panel</a>
 
 </div>
 

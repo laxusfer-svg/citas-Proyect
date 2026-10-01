@@ -473,7 +473,7 @@ if ($rol == 0) {
                 <span>Doctores</span>
             </a>
 
-            <a href="reporte_citas">
+            <a href="citas_admin">
                 <div class="menu-icon">📅</div>
                 <span>Citas</span>
             </a>
