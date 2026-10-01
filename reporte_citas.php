@@ -67,6 +67,72 @@ if (count($where) > 0) {
     $whereSQL = "WHERE " . implode(" AND ", $where);
 }
 
+if (($_GET["exportar"] ?? "") === "excel") {
+    $sqlExportar = "
+        SELECT
+            c.fecha,
+            c.hora,
+            p.nombres AS paciente_nombres,
+            p.apellidos AS paciente_apellidos,
+            p.dni,
+            d.nombres AS doctor_nombres,
+            d.apellidos AS doctor_apellidos,
+            d.especialidad,
+            c.modalidad,
+            c.estado,
+            c.motivo
+        FROM citas c
+        INNER JOIN pacientes p ON c.paciente_id = p.id
+        INNER JOIN doctores d ON c.doctor_id = d.id
+        $whereSQL
+        ORDER BY c.fecha DESC, c.hora DESC
+    ";
+
+    $stmt = $conexion->prepare($sqlExportar);
+
+    if ($types !== "") {
+        $stmt->bind_param($types, ...$params);
+    }
+
+    $stmt->execute();
+    $resultadoExportar = $stmt->get_result();
+
+    header("Content-Type: text/csv; charset=UTF-8");
+    header("Content-Disposition: attachment; filename=reporte_citas_" . date("Ymd_His") . ".csv");
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+
+    $salida = fopen("php://output", "w");
+    fwrite($salida, "\xEF\xBB\xBF");
+    fputcsv($salida, ["Fecha", "Hora", "Paciente", "DNI", "Doctor", "Especialidad", "Modalidad", "Estado", "Motivo"], ";", '"', "\\");
+
+    while ($fila = $resultadoExportar->fetch_assoc()) {
+        $valores = [
+            $fila["fecha"],
+            $fila["hora"],
+            $fila["paciente_apellidos"] . ", " . $fila["paciente_nombres"],
+            $fila["dni"],
+            $fila["doctor_apellidos"] . ", " . $fila["doctor_nombres"],
+            $fila["especialidad"],
+            $fila["modalidad"],
+            $fila["estado"],
+            $fila["motivo"] ?? ""
+        ];
+
+        foreach ($valores as &$valor) {
+            $valor = (string)$valor;
+            if (preg_match('/^[=+@\\-\t\r]/', $valor)) {
+                $valor = "'" . $valor;
+            }
+        }
+        unset($valor);
+
+        fputcsv($salida, $valores, ";", '"', "\\");
+    }
+
+    fclose($salida);
+    exit;
+}
+
 
 /* ==========================================
    TOTAL DE CITAS
@@ -250,6 +316,7 @@ while ($fila = $resultMes->fetch_assoc()) {
             </div>
 
             <button type="submit">🔎 Buscar</button>
+            <button type="submit" name="exportar" value="excel">Descargar para Excel</button>
             <a href="reporte_citas" class="boton boton-limpiar">Limpiar</a>
         </form>
     </div>
