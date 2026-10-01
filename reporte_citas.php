@@ -27,6 +27,17 @@ $etiquetasEstadoCita = [
 $fecha_inicio = $_GET["fecha_inicio"] ?? "";
 $fecha_fin = $_GET["fecha_fin"] ?? "";
 $dni = trim($_GET["dni"] ?? "");
+$estadoSeleccionado = $_GET["estado"] ?? "";
+$etiquetasEstado = [
+    "pendiente" => "Pendiente",
+    "confirmada" => "Confirmada",
+    "atendida" => "Atendida",
+    "cancelada" => "Cancelada"
+];
+
+if (!is_string($estadoSeleccionado) || !array_key_exists($estadoSeleccionado, $etiquetasEstado)) {
+    $estadoSeleccionado = "";
+}
 
 /* ==========================================
    CONDICIONES DEL FILTRO
@@ -51,6 +62,12 @@ if ($fecha_fin != "") {
 if ($dni != "") {
     $where[] = "p.dni LIKE ?";
     $params[] = "%" . $dni . "%";
+    $types .= "s";
+}
+
+if ($estadoSeleccionado !== "") {
+    $where[] = "c.estado = ?";
+    $params[] = $estadoSeleccionado;
     $types .= "s";
 }
 
@@ -272,6 +289,16 @@ $resultDetalle = $stmt->get_result();
             <div class="campo">
                 <label>DNI del paciente</label>
                 <input type="text" name="dni" placeholder="Ingrese DNI" value="<?php echo htmlspecialchars($dni); ?>">
+            </div>
+
+            <div class="campo">
+                <label for="filtroEstado">Estado de la cita</label>
+                <select id="filtroEstado" name="estado">
+                    <option value="">Todos los estados</option>
+                    <?php foreach ($etiquetasEstado as $valorEstado => $textoEstado): ?>
+                        <option value="<?php echo htmlspecialchars($valorEstado, ENT_QUOTES, "UTF-8"); ?>" <?php echo $estadoSeleccionado === $valorEstado ? "selected" : ""; ?>><?php echo htmlspecialchars($textoEstado, ENT_QUOTES, "UTF-8"); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <button type="submit">🔎 Buscar</button>
