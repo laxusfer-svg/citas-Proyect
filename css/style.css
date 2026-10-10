@@ -1,7 +1,12 @@
 :root {
-    --color-primary: #1976e8;
-    --color-primary-hover: #0d64ce;
-    --color-page-background: #f4f7fb;
+    --color-primary: #087f8c;
+    --color-primary-hover: #066a75;
+    --color-page-background: #f2f7fa;
+    --color-ink: #183247;
+    --color-muted: #647b8d;
+    --color-surface: #ffffff;
+    --color-line: #dce8ed;
+    --shadow-card: 0 18px 48px rgba(28, 66, 86, .10);
 }
 
 /* page-login */
@@ -3733,5 +3738,496 @@ a:focus-visible {
             align-items: stretch;
             flex-direction: column;
         }
+    }
+}
+
+/* Refresh visual y ajustes adaptables */
+@media (hover: none) {
+    button,
+    a,
+    select,
+    input,
+    textarea {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+body.page-login {
+    min-height: 100vh;
+    min-height: 100svh;
+    background:
+        radial-gradient(ellipse at 12% 10%, rgba(71, 208, 205, .2), transparent 34%),
+        radial-gradient(ellipse at 88% 90%, rgba(54, 134, 219, .16), transparent 36%),
+        linear-gradient(135deg, #eef8fa, #f7f9ff 55%, #edf4fb);
+    color: var(--color-ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.page-login .login-wrapper {
+    width: min(1080px, calc(100% - 40px));
+    min-height: 620px;
+    border: 1px solid rgba(255, 255, 255, .9);
+    border-radius: 28px;
+    box-shadow: 0 32px 90px rgba(25, 66, 96, .18);
+}
+
+body.page-login .panel-izquierdo {
+    background:
+        radial-gradient(circle at 80% 18%, rgba(105, 237, 221, .24), transparent 30%),
+        linear-gradient(150deg, #123f58, #087f8c 58%, #146d91);
+}
+
+body.page-login .panel-derecho {
+    background: rgba(255, 255, 255, .96);
+}
+
+body.page-login .panel-derecho input {
+    min-height: 50px;
+    border-radius: 12px;
+    border-color: #d5e2e8;
+    background: #f9fcfd;
+    font: inherit;
+}
+
+body.page-login .panel-derecho input:focus {
+    border-color: #16a0a3;
+    box-shadow: 0 0 0 4px rgba(22, 160, 163, .12);
+}
+
+body.page-login .btn-ingresar {
+    min-height: 52px;
+    border-radius: 13px;
+    background: linear-gradient(110deg, #087f8c, #176cb1);
+    box-shadow: 0 10px 24px rgba(8, 127, 140, .22);
+}
+
+body.has-sidebar {
+    color: var(--color-ink);
+    background:
+        radial-gradient(ellipse at 86% 0%, rgba(94, 194, 197, .10), transparent 32%),
+        var(--color-page-background);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.has-sidebar .sidebar {
+    background: linear-gradient(180deg, #12384f, #102d43 75%, #0d263b);
+    box-shadow: 10px 0 32px rgba(17, 50, 70, .12);
+}
+
+body.has-sidebar .sidebar .logo-icon {
+    border-radius: 14px;
+    background: linear-gradient(145deg, #36c6c3, #168caa);
+    box-shadow: 0 8px 18px rgba(54, 198, 195, .22);
+}
+
+body.has-sidebar .sidebar .menu a {
+    min-height: 46px;
+    border-radius: 11px;
+    transition: background .18s ease, transform .18s ease;
+}
+
+body.has-sidebar .sidebar .menu a:hover,
+body.has-sidebar .sidebar .menu a.activo {
+    background: rgba(126, 224, 219, .15);
+}
+
+body.has-sidebar .contenido,
+body.has-sidebar .pacientes-page,
+body.has-sidebar .doctores-page {
+    padding-top: 30px;
+}
+
+body.has-sidebar .tarjeta,
+body.has-sidebar .seccion,
+body.has-sidebar .card,
+body.has-sidebar .resumen-card,
+body.has-sidebar .pacientes-section,
+body.has-sidebar .doctores-section {
+    border: 1px solid rgba(208, 224, 231, .9);
+    border-radius: 18px;
+    box-shadow: var(--shadow-card);
+}
+
+body.page-reserva {
+    color: var(--color-ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.page-reserva .reserva-overlay {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 24px;
+    background:
+        radial-gradient(ellipse at 10% 8%, rgba(74, 195, 193, .18), transparent 33%),
+        radial-gradient(ellipse at 95% 90%, rgba(64, 136, 191, .14), transparent 36%),
+        linear-gradient(145deg, #eff7f7, #f5f8fb);
+}
+
+body.page-reserva .modal-cita {
+    border-color: rgba(207, 226, 229, .9);
+    border-radius: 24px;
+    box-shadow: 0 30px 90px rgba(25, 66, 80, .17);
+}
+
+body.page-reserva .modal-cita-header {
+    background:
+        radial-gradient(circle at 92% 0%, rgba(104, 224, 212, .20), transparent 31%),
+        linear-gradient(125deg, #123f52, #087f83 75%, #117f93);
+}
+
+body.page-reserva .campo select,
+body.page-reserva .campo textarea,
+body.page-reserva input[type="date"] {
+    min-height: 48px;
+    border: 1px solid #d3e2e6;
+    border-radius: 12px;
+    background: #fbfdfd;
+    color: var(--color-ink);
+    font: inherit;
+}
+
+body.page-reserva .campo select:focus,
+body.page-reserva .campo textarea:focus,
+body.page-reserva input[type="date"]:focus {
+    border-color: #148f96;
+    outline: 0;
+    box-shadow: 0 0 0 4px rgba(20, 143, 150, .12);
+}
+
+body.page-reserva .calendario-wrapper {
+    border-color: var(--color-line);
+    border-radius: 16px;
+    background: #f7fbfc;
+}
+
+body.page-reserva .horario {
+    min-height: 48px;
+    border: 1px solid #b6d9dc;
+    border-radius: 12px;
+    color: #126b75;
+    background: #faffff;
+}
+
+body.page-reserva .horario:hover,
+body.page-reserva .horario.seleccionado {
+    border-color: #087f8c;
+    color: #fff;
+    background: linear-gradient(125deg, #087f8c, #1683a2);
+    box-shadow: 0 7px 16px rgba(8, 127, 140, .18);
+}
+
+body.page-reserva .btn-guardar {
+    min-height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(110deg, #087f8c, #176cb1);
+    box-shadow: 0 8px 20px rgba(8, 127, 140, .16);
+}
+
+body.page-reserva .btn-guardar:disabled {
+    box-shadow: none;
+}
+
+body.page-reserva .modalidad-opcion {
+    border-radius: 14px;
+}
+
+body.page-reserva .modalidad-opcion:has(input:checked) {
+    border-color: #128b91;
+    background: #f0fbfa;
+    box-shadow: 0 0 0 3px rgba(18, 139, 145, .09);
+}
+
+body :where(button, a, input, select, textarea):focus-visible {
+    outline: 3px solid #28b9bb;
+    outline-offset: 3px;
+}
+
+@media (max-width: 800px) {
+    body.has-sidebar .contenido,
+    body.has-sidebar .pacientes-page,
+    body.has-sidebar .doctores-page {
+        padding-top: 22px;
+    }
+}
+
+@media (max-width: 560px) {
+    body.page-login {
+        min-height: 100vh;
+        min-height: 100svh;
+        padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+    }
+
+    body.page-login .login-wrapper {
+        width: 100%;
+        max-width: 460px;
+        min-height: 0;
+        border-radius: 22px;
+    }
+
+    body.page-login .panel-izquierdo {
+        padding: 24px 22px;
+    }
+
+    body.page-login .panel-derecho {
+        padding: 28px 22px;
+    }
+
+    body.page-login .beneficios {
+        margin-top: 22px;
+    }
+
+    body.has-sidebar .contenido,
+    body.has-sidebar .pacientes-page,
+    body.has-sidebar .doctores-page {
+        padding-right: 14px;
+        padding-bottom: calc(92px + env(safe-area-inset-bottom));
+        padding-left: 14px;
+    }
+
+    body.has-sidebar .topbar,
+    body.has-sidebar .citas-admin-header,
+    body.has-sidebar .pacientes-header,
+    body.has-sidebar .doctores-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    body.page-reserva .reserva-overlay {
+        min-height: 100vh;
+        min-height: 100svh;
+        padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+    }
+
+    body.page-reserva .modal-cita {
+        max-height: calc(100vh - 16px);
+        max-height: calc(100svh - 16px);
+        border-radius: 18px;
+    }
+
+    body.page-reserva .modal-cita-header {
+        position: relative;
+        padding-top: 22px;
+    }
+
+    body.page-reserva .modal-cerrar {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+    }
+
+    body.page-reserva .formulario {
+        padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    }
+
+    body.page-reserva .botones > button,
+    body.page-reserva .botones > .boton {
+        min-height: 48px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body.has-sidebar .sidebar {
+        position: fixed;
+        z-index: 1000;
+        top: auto;
+        right: auto;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        left: 50%;
+        display: flex;
+        align-items: center;
+        width: min(520px, calc(100% - 24px));
+        min-height: 76px;
+        padding: 10px 12px;
+        gap: 8px;
+        transform: translateX(-50%);
+        border: 1px solid rgba(225, 237, 242, .95);
+        border-radius: 24px;
+        background: rgba(255, 255, 255, .94);
+        box-shadow: 0 14px 36px rgba(20, 53, 72, .2), 0 2px 7px rgba(20, 53, 72, .07);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+    }
+
+    body.has-sidebar .sidebar > .menu {
+        flex: 1 1 auto;
+        align-items: center;
+        justify-content: space-around;
+        gap: 2px;
+        min-width: 0;
+    }
+
+    body.has-sidebar .sidebar > .menu > a {
+        position: relative;
+        display: flex;
+        flex: 1 1 0;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 54px;
+        padding: 4px 2px;
+        gap: 3px;
+        border-radius: 16px;
+        color: #62717d;
+        transition: color .2s ease, background .2s ease, transform .2s cubic-bezier(.2,.8,.2,1);
+    }
+
+    body.has-sidebar .sidebar > .menu > a .menu-icon {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        font-size: 19px;
+        line-height: 1;
+        filter: saturate(.82);
+        transition: transform .22s cubic-bezier(.2,.8,.2,1), filter .22s ease;
+    }
+
+    body.has-sidebar .sidebar > .menu > a > span {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        color: inherit;
+        font-size: 9px;
+        font-weight: 650;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    body.has-sidebar .sidebar > .menu > a.activo {
+        color: #087f8c;
+        background: #eaf7f7;
+    }
+
+    body.has-sidebar .sidebar > .menu > a.activo .menu-icon {
+        transform: translateY(-1px) scale(1.08);
+        filter: saturate(1.2);
+    }
+
+    body.has-sidebar .sidebar > .menu > a.menu-destacado {
+        z-index: 1;
+        overflow: visible;
+        justify-content: flex-end;
+        padding-top: 22px;
+        color: #405261;
+    }
+
+    body.has-sidebar .sidebar > .menu > a.menu-destacado .menu-icon {
+        position: absolute;
+        top: -17px;
+        left: 50%;
+        width: 58px;
+        height: 58px;
+        transform: translateX(-50%);
+        border: 4px solid #fff;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(145deg, #ff368c, #df28cf 62%, #a83de8);
+        box-shadow: 0 5px 0 #632b85, 0 9px 18px rgba(202, 36, 177, .32);
+        font-size: 20px;
+        filter: none;
+        animation: nav-destacado 2.8s ease-in-out infinite;
+        transition: transform .24s cubic-bezier(.2,.8,.2,1), box-shadow .24s ease;
+    }
+
+    body.has-sidebar .sidebar > .menu > a.menu-destacado[href="sacar_cita"] .menu-icon {
+        font-size: 0;
+    }
+
+    body.has-sidebar .sidebar > .menu > a.menu-destacado[href="sacar_cita"] .menu-icon::after {
+        content: "+";
+        font-size: 29px;
+        font-weight: 500;
+        line-height: 1;
+    }
+
+    body.has-sidebar .sidebar > .menu > a.menu-destacado.activo .menu-icon {
+        transform: translateX(-50%) translateY(-3px) scale(1.05);
+        box-shadow: 0 5px 0 #632b85, 0 12px 23px rgba(202, 36, 177, .4);
+        animation: nav-destacado 2.8s ease-in-out infinite;
+    }
+
+    body.has-sidebar .sidebar > .menu > a:not(.menu-destacado):active .menu-icon,
+    body.has-sidebar .sidebar > .menu > a.menu-destacado:active .menu-icon {
+        transform: translateX(-50%) scale(.92);
+    }
+
+    body.has-sidebar .sidebar > .menu > a:not(.menu-destacado):active .menu-icon {
+        transform: scale(.88);
+    }
+
+    body.has-sidebar .sidebar > .cerrar-sesion {
+        position: static;
+        display: flex;
+        flex: 0 0 42px;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+    }
+
+    body.has-sidebar .sidebar > .cerrar-sesion .logout-button {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        min-height: 48px;
+        padding: 4px;
+        border: 0;
+        border-radius: 14px;
+        color: #62717d;
+        background: transparent;
+        font-size: 18px;
+        transition: color .2s ease, background .2s ease, transform .2s ease;
+    }
+
+    body.has-sidebar .sidebar > .cerrar-sesion .logout-button span:last-child {
+        display: none;
+    }
+
+    body.has-sidebar .sidebar > .cerrar-sesion .logout-button:active {
+        transform: scale(.9);
+        color: #b04461;
+        background: #fff0f3;
+    }
+
+    body.has-sidebar .contenido,
+    body.has-sidebar .contenedor,
+    body.has-sidebar .doctores-page,
+    body.has-sidebar .pacientes-page {
+        padding-bottom: calc(112px + env(safe-area-inset-bottom));
+    }
+}
+
+@keyframes nav-destacado {
+    0%, 72%, 100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+        box-shadow: 0 5px 0 #632b85, 0 9px 18px rgba(202, 36, 177, .3);
+    }
+    82% {
+        opacity: .15;
+        transform: translateX(-50%) translateY(5px) scale(.55);
+        box-shadow: 0 2px 0 #632b85, 0 3px 8px rgba(202, 36, 177, .12);
+    }
+    90% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px) scale(1.12);
+        box-shadow: 0 6px 0 #632b85, 0 13px 24px rgba(202, 36, 177, .42);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.has-sidebar .sidebar > .menu > a.menu-destacado.activo .menu-icon {
+        animation: none;
     }
 }

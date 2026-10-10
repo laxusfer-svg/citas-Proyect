@@ -14,8 +14,8 @@ $menusPorRol = [
     2 => [
         ["panel", "panel", "⌂", "Inicio"],
         ["pacientes", "pacientes", "👥", "Pacientes"],
-        ["doctores", "doctores", "👨‍⚕️", "Doctores"],
         ["citas", "citas_admin", "📅", "Citas"],
+        ["doctores", "doctores", "👨‍⚕️", "Doctores"],
         ["reportes", "reporte_citas", "📊", "Reportes"]
     ]
 ];
@@ -30,8 +30,8 @@ $opcionesSidebar = $menusPorRol[(int)($_SESSION["rol"] ?? -1)] ?? [];
 
     <nav class="menu" aria-label="Navegación principal">
         <?php foreach ($opcionesSidebar as [$clave, $href, $icono, $etiqueta]): ?>
-            <a href="<?php echo htmlspecialchars($href, ENT_QUOTES, "UTF-8"); ?>" class="<?php echo $paginaActiva === $clave ? "activo" : ""; ?>">
-                <div class="menu-icon"><?php echo $icono; ?></div>
+            <a href="<?php echo htmlspecialchars($href, ENT_QUOTES, "UTF-8"); ?>" class="<?php echo $paginaActiva === $clave ? "activo" : ""; ?><?php echo $clave === "sacar_cita" || ((int)($_SESSION["rol"] ?? -1) === 2 && $clave === "citas") ? " menu-destacado" : ""; ?>" <?php echo $paginaActiva === $clave ? 'aria-current="page"' : ""; ?>>
+                <div class="menu-icon" aria-hidden="true"><?php echo $icono; ?></div>
                 <span><?php echo htmlspecialchars($etiqueta, ENT_QUOTES, "UTF-8"); ?></span>
             </a>
         <?php endforeach; ?>
