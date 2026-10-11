@@ -358,7 +358,7 @@ $especialidades = array_values($especialidades);
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Sacar Cita</title>
 
 <!-- Flatpickr CSS para el Calendario Interactivo -->
@@ -366,7 +366,7 @@ $especialidades = array_values($especialidades);
 
 
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20261011-responsive">
 </head>
 
 <body class="page-reserva">

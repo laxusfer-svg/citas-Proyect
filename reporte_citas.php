@@ -263,13 +263,14 @@ while ($fila = $resultMes->fetch_assoc()) {
 <html lang="es">
 
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta charset="UTF-8">
     <title>Reporte de Citas</title>
     <!-- Librería Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20261011-responsive">
 </head>
 
 <body class="page-reporte has-sidebar">

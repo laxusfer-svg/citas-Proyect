@@ -123,9 +123,9 @@ $estaEditando = $pacienteId > 0;
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Administrar pacientes</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20261011-responsive">
 </head>
 <body class="page-pacientes has-sidebar">
 <?php include "sidebar.php"; ?>
@@ -217,14 +217,14 @@ $estaEditando = $pacienteId > 0;
                     <tbody>
                         <?php foreach ($pacientes as $paciente): ?>
                             <tr>
-                                <td><strong><?php echo htmlspecialchars($paciente["nombres"] . " " . $paciente["apellidos"], ENT_QUOTES, "UTF-8"); ?></strong></td>
-                                <td><?php echo htmlspecialchars($paciente["dni"], ENT_QUOTES, "UTF-8"); ?></td>
-                                <td>
+                                <td data-label="Paciente"><strong><?php echo htmlspecialchars($paciente["nombres"] . " " . $paciente["apellidos"], ENT_QUOTES, "UTF-8"); ?></strong></td>
+                                <td data-label="DNI"><?php echo htmlspecialchars($paciente["dni"], ENT_QUOTES, "UTF-8"); ?></td>
+                                <td data-label="Contacto">
                                     <span><?php echo htmlspecialchars($paciente["telefono"] ?: "Sin teléfono", ENT_QUOTES, "UTF-8"); ?></span>
                                     <small><?php echo htmlspecialchars($paciente["correo"] ?: "Sin correo", ENT_QUOTES, "UTF-8"); ?></small>
                                 </td>
-                                <td><?php echo htmlspecialchars(date("d/m/Y", strtotime($paciente["fecha_registro"])), ENT_QUOTES, "UTF-8"); ?></td>
-                                <td><a class="pacientes-edit" href="pacientes?editar=<?php echo (int)$paciente["id"]; ?>">Editar</a></td>
+                                <td data-label="Registro"><?php echo htmlspecialchars(date("d/m/Y", strtotime($paciente["fecha_registro"])), ENT_QUOTES, "UTF-8"); ?></td>
+                                <td data-label="Acción"><a class="pacientes-edit" href="pacientes?editar=<?php echo (int)$paciente["id"]; ?>">Editar</a></td>
                             </tr>
                         <?php endforeach; ?>
                         <?php if (!$pacientes): ?>

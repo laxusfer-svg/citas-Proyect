@@ -404,7 +404,7 @@ if ($rol == 0) {
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <title>Panel - Sistema de Citas Médicas</title>
 
@@ -417,7 +417,7 @@ if ($rol == 0) {
 
 
 
-    <link rel="stylesheet" href="css/style.css?v=20261011-doctor-tabs-3">
+    <link rel="stylesheet" href="css/style.css?v=20261011-responsive">
 </head>
 
 
