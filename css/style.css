@@ -4741,16 +4741,18 @@ body :where(button, a, input, select, textarea):focus-visible {
     }
 
     body.page-panel[data-user-role="1"] .sidebar > .menu {
-        display: grid;
+        display: flex;
         flex: 1 1 0;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        justify-content: stretch;
+        flex-direction: row;
+        justify-content: space-between;
         gap: 6px;
         min-width: 0;
     }
 
     body.page-panel[data-user-role="1"] .sidebar > .menu > a {
-        width: 100%;
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
         min-height: 56px;
         padding: 5px 4px;
         overflow: visible;
