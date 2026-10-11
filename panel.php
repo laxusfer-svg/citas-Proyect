@@ -417,7 +417,7 @@ if ($rol == 0) {
 
 
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20261011-nav">
 </head>
 
 
