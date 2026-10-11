@@ -421,7 +421,7 @@ if ($rol == 0) {
 </head>
 
 
-<body class="page-panel has-sidebar">
+<body class="page-panel has-sidebar" data-user-role="<?php echo (int)$rol; ?>">
 
 <?php
 $paginaActiva = "panel";
