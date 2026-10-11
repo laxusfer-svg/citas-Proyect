@@ -4766,4 +4766,141 @@ body :where(button, a, input, select, textarea):focus-visible {
     body.page-panel[data-user-role="1"] .sidebar > .cerrar-sesion {
         flex: 0 0 40px;
     }
+
+    body.page-panel[data-user-role="1"] .contenido {
+        width: 100%;
+        min-height: 100svh;
+        margin: 0;
+        padding: 16px 12px calc(100px + env(safe-area-inset-bottom));
+    }
+
+    body.page-panel[data-user-role="1"] .topbar {
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    body.page-panel[data-user-role="1"] .titulo h1 {
+        font-size: clamp(21px, 6vw, 26px);
+        line-height: 1.15;
+    }
+
+    body.page-panel[data-user-role="1"] .titulo p {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    body.page-panel[data-user-role="1"] .usuario {
+        max-width: 100%;
+        padding: 8px 10px;
+        overflow-wrap: anywhere;
+        font-size: 12px;
+    }
+
+    body.page-panel[data-user-role="1"] .tarjetas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+        margin-bottom: 14px;
+    }
+
+    body.page-panel[data-user-role="1"] .tarjeta {
+        min-width: 0;
+        gap: 8px;
+        padding: 11px 9px;
+        border-radius: 12px;
+    }
+
+    body.page-panel[data-user-role="1"] .tarjeta-icono {
+        width: 34px;
+        height: 34px;
+        font-size: 17px;
+    }
+
+    body.page-panel[data-user-role="1"] .tarjeta-info h3 {
+        font-size: 11px;
+        line-height: 1.2;
+    }
+
+    body.page-panel[data-user-role="1"] .numero {
+        font-size: 21px;
+    }
+
+    body.page-panel[data-user-role="1"] .info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+        margin-bottom: 14px;
+    }
+
+    body.page-panel[data-user-role="1"] .info-card {
+        min-width: 0;
+        padding: 12px;
+        border-radius: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    body.page-panel[data-user-role="1"] .info-card:last-child {
+        grid-column: 1 / -1;
+    }
+
+    body.page-panel[data-user-role="1"] .info-card small {
+        font-size: 11px;
+    }
+
+    body.page-panel[data-user-role="1"] .info-card strong {
+        font-size: 14px;
+    }
+
+    body.page-panel[data-user-role="1"] .seccion {
+        margin-bottom: 16px;
+        padding: 13px;
+        border-radius: 14px;
+    }
+
+    body.page-panel[data-user-role="1"] .seccion-header {
+        margin-bottom: 12px;
+    }
+
+    body.page-panel[data-user-role="1"] .seccion h2 {
+        font-size: 16px;
+    }
+
+    body.page-panel[data-user-role="1"] .filtro-resultado {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 10px;
+        font-size: 11px;
+    }
+
+    body.page-panel[data-user-role="1"] .seccion table {
+        width: max-content;
+        min-width: 580px;
+        font-size: 12px;
+    }
+
+    body.page-panel[data-user-role="1"] .seccion th,
+    body.page-panel[data-user-role="1"] .seccion td {
+        padding: 9px 8px;
+    }
+}
+
+@media (max-width: 360px) {
+    body.page-panel[data-user-role="1"] .contenido {
+        padding-right: 9px;
+        padding-left: 9px;
+    }
+
+    body.page-panel[data-user-role="1"] .tarjeta {
+        gap: 6px;
+        padding: 10px 7px;
+    }
+
+    body.page-panel[data-user-role="1"] .tarjeta-icono {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+    }
+
+    body.page-panel[data-user-role="1"] .tarjeta-info h3 {
+        font-size: 10px;
+    }
 }
