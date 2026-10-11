@@ -224,13 +224,13 @@ while ($doctor = $resultadoDoctores->fetch_assoc()) {
                     <tbody>
                         <?php foreach ($doctores as $doctor): ?>
                             <tr>
-                                <td>
+                                <td data-label="Profesional">
                                     <strong><?php echo htmlspecialchars($doctor["nombres"] . " " . $doctor["apellidos"], ENT_QUOTES, "UTF-8"); ?></strong>
                                     <small><?php echo htmlspecialchars($doctor["cmp"] ?: "CMP no registrado", ENT_QUOTES, "UTF-8"); ?></small>
                                 </td>
-                                <td><?php echo htmlspecialchars($doctor["especialidad"], ENT_QUOTES, "UTF-8"); ?></td>
-                                <td><?php echo htmlspecialchars(substr($doctor["hora_inicio"], 0, 5) . " - " . substr($doctor["hora_fin"], 0, 5), ENT_QUOTES, "UTF-8"); ?></td>
-                                <td><?php echo htmlspecialchars($doctor["usuario"], ENT_QUOTES, "UTF-8"); ?></td>
+                                <td data-label="Especialidad"><?php echo htmlspecialchars($doctor["especialidad"], ENT_QUOTES, "UTF-8"); ?></td>
+                                <td data-label="Horario"><?php echo htmlspecialchars(substr($doctor["hora_inicio"], 0, 5) . " - " . substr($doctor["hora_fin"], 0, 5), ENT_QUOTES, "UTF-8"); ?></td>
+                                <td data-label="Acceso"><?php echo htmlspecialchars($doctor["usuario"], ENT_QUOTES, "UTF-8"); ?></td>
                             </tr>
                         <?php endforeach; ?>
                         <?php if (!$doctores): ?>

@@ -4377,3 +4377,263 @@ body :where(button, a, input, select, textarea):focus-visible {
         animation: none;
     }
 }
+
+/* Ajustes finales para evitar alturas y anchos rígidos en móvil. */
+@media (max-width: 850px) {
+    body.page-login {
+        min-height: 100svh;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 18px 0 24px;
+        overflow-y: auto;
+    }
+
+    body.page-login .login-wrapper {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(100% - 32px, 560px);
+        min-height: 0;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    body.page-login .panel-izquierdo {
+        min-height: 0;
+        padding: 28px clamp(22px, 6vw, 38px);
+    }
+
+    body.page-login .doctor-ilustracion {
+        display: none;
+    }
+
+    body.page-login .beneficios {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    body.page-login .beneficio {
+        min-width: 0;
+        padding: 10px;
+    }
+
+    body.page-login .panel-derecho {
+        padding: clamp(26px, 6vw, 42px);
+    }
+
+    body.page-login .footer {
+        position: static;
+        margin: 14px auto 0;
+    }
+}
+
+@media (max-width: 560px) {
+    body.page-login {
+        padding: 10px 0 18px;
+    }
+
+    body.page-login .login-wrapper {
+        width: calc(100% - 20px);
+        border-radius: 20px;
+    }
+
+    body.page-login .panel-izquierdo {
+        padding: 22px 20px;
+    }
+
+    body.page-login .beneficios {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 7px;
+        margin-top: 15px;
+    }
+
+    body.page-login .beneficio {
+        padding: 7px 9px;
+    }
+
+    body.page-login .panel-derecho {
+        padding: 28px 20px;
+    }
+
+    body.page-login .login-titulo {
+        margin-bottom: 24px;
+    }
+
+    body.page-login .login-titulo h2 {
+        font-size: 25px;
+    }
+
+    body.page-doctores .doctores-page {
+        width: calc(100% - 24px);
+        padding: 18px 0 calc(126px + env(safe-area-inset-bottom));
+    }
+
+    body.page-doctores .doctores-header {
+        gap: 12px;
+    }
+
+    body.page-doctores .doctores-back {
+        width: 100%;
+    }
+
+    body.page-doctores .doctores-layout {
+        gap: 14px;
+    }
+
+    body.page-doctores .doctores-form-section,
+    body.page-doctores .doctores-list-section {
+        padding: 16px 13px;
+    }
+
+    body.page-doctores .doctores-section-heading {
+        gap: 8px;
+    }
+
+    body.page-doctores .doctores-section-heading h2 {
+        font-size: 17px;
+    }
+
+    body.page-doctores .doctor-form-footer button {
+        width: 100%;
+        min-height: 48px;
+    }
+
+    body.page-doctores .doctores-table-wrap {
+        overflow: visible;
+    }
+
+    body.page-doctores .doctores-table,
+    body.page-doctores .doctores-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    body.page-doctores .doctores-table thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+
+    body.page-doctores .doctores-table tbody tr:not(:has(.doctores-empty)) {
+        display: grid;
+        gap: 0;
+        margin-bottom: 12px;
+        padding: 6px 12px;
+        border: 1px solid #e3ebf2;
+        border-radius: 12px;
+        background: #fbfdff;
+    }
+
+    body.page-doctores .doctores-table td {
+        display: grid;
+        grid-template-columns: minmax(88px, .7fr) minmax(0, 1.3fr);
+        gap: 10px;
+        padding: 9px 0;
+        overflow-wrap: anywhere;
+        text-align: right;
+    }
+
+    body.page-doctores .doctores-table td::before {
+        content: attr(data-label);
+        color: #71869a;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    body.page-doctores .doctores-table td strong,
+    body.page-doctores .doctores-table td small {
+        grid-column: 2;
+        text-align: right;
+    }
+
+    body.page-doctores .doctores-table td strong {
+        grid-row: 1;
+    }
+
+    body.page-doctores .doctores-table td small {
+        grid-row: 2;
+        margin-top: -5px;
+    }
+
+    body.page-doctores .doctores-table .doctores-empty {
+        display: block;
+        text-align: center;
+    }
+}
+
+@media (max-width: 860px) {
+    body.page-reserva .modal-cita {
+        width: min(100%, 680px);
+    }
+
+    body.page-reserva .reserva-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    body.page-reserva .reserva-columna-horarios {
+        padding: 18px 0 0;
+        border-top: 1px solid #e5eceb;
+        border-left: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    body.page-reserva .reserva-overlay {
+        padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+    }
+
+    body.page-reserva .modal-cita {
+        width: 100%;
+        max-height: none;
+        overflow: visible;
+    }
+
+    body.page-reserva .modal-cita-header {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        padding: 20px 16px 16px;
+    }
+
+    body.page-reserva .modal-subtitulo {
+        max-width: 34ch;
+    }
+
+    body.page-reserva .modal-paciente {
+        grid-column: 1 / -1;
+        max-width: 100%;
+    }
+
+    body.page-reserva .formulario {
+        padding: 18px 14px calc(24px + env(safe-area-inset-bottom));
+    }
+
+    body.page-reserva .modalidad-opciones {
+        gap: 8px;
+    }
+
+    body.page-reserva .modalidad-opcion {
+        min-height: 62px;
+        padding: 10px 8px;
+    }
+
+    body.page-reserva .reserva-acciones {
+        position: static;
+        flex-direction: column;
+        margin: 8px -14px calc(-24px - env(safe-area-inset-bottom));
+        padding: 14px 14px calc(16px + env(safe-area-inset-bottom));
+    }
+
+    body.page-reserva .reserva-acciones > button,
+    body.page-reserva .reserva-acciones > .boton {
+        width: 100%;
+    }
+
+    body.page-reserva .horarios {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
