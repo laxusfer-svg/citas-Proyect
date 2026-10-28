@@ -3,6 +3,12 @@ DirectoryIndex index.php
 
 RewriteEngine On
 
+RewriteRule ^exportar_excel_java\.php$ - [END]
+RewriteRule ^exportar_excel_java/?$ exportar_excel_java.php [END]
+
+# Excluir archivo temporal de prueba
+RewriteRule ^prueba_java\.php$ - [END]
+
 RewriteCond %{THE_REQUEST} \s/+index\.php(?:[?\s]) [NC]
 RewriteRule ^index\.php$ ./ [R=301,L]
 

@@ -316,9 +316,24 @@ while ($fila = $resultMes->fetch_assoc()) {
                 </select>
             </div>
 
-            <button type="submit">🔎 Buscar</button>
-            <button type="submit" name="exportar" value="excel">Exportar CSV para Excel</button>
-            <a href="reporte_citas" class="boton boton-limpiar">Limpiar</a>
+	<button type="submit">🔎 Buscar</button>
+
+<button type="submit" name="exportar" value="excel">
+    Exportar CSV para Excel
+</button>
+
+<button
+    type="submit"
+    formaction="exportar_excel_java"
+    formmethod="GET"
+    formtarget="_blank">
+    📊 Exportar Excel con Java
+</button>
+
+<a href="reporte_citas" class="boton boton-limpiar">
+    Limpiar
+</a>            
+
         </form>
     </div>
 
